@@ -26,9 +26,9 @@ export function OwnerHomeFieldList({ fields, onInfoClick }: OwnerHomeFieldListPr
               <h4 className="text-xl font-semibold">{field.name}</h4>
               <Button
                 variant="secondary"
-                size="sm"
+                className="rounded-full border-none bg-blue-500/20 text-[10px] font-semibold text-blue-200 hover:bg-blue-500/30 px-3 py-1 min-w-0 min-h-0"
+                style={{lineHeight: '1.1'}} // per renderlo più compatto
                 onClick={() => onInfoClick(field)}
-                className="rounded-full text-xs bg-blue-400/10 text-blue-200"
               >
                 Info
               </Button>

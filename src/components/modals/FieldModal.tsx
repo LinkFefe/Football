@@ -13,6 +13,8 @@ interface FieldModalProps {
   setFieldSize: (size: string) => void;
   fieldLocation: string;
   setFieldLocation: (location: string) => void;
+  fieldImageUrl: string;
+  setFieldImageUrl: (url: string) => void;
   isLoading: boolean;
   error: string | null;
   onClose: () => void;
@@ -27,6 +29,8 @@ export function FieldModal({
   setFieldSize,
   fieldLocation,
   setFieldLocation,
+  fieldImageUrl,
+  setFieldImageUrl,
   isLoading,
   error,
   onClose,
@@ -69,6 +73,13 @@ export function FieldModal({
             label="Luogo"
             value={fieldLocation}
             onChange={(e) => setFieldLocation(e.target.value)}
+          />
+
+          <Input
+            label="URL immagine"
+            value={fieldImageUrl}
+            onChange={(e) => setFieldImageUrl(e.target.value)}
+            placeholder="https://..."
           />
 
           {error && (
