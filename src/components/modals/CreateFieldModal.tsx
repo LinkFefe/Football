@@ -1,0 +1,104 @@
+"use client";
+
+import React from "react";
+import { Button } from "../ui/Button";
+import { Input } from "../ui/Input";
+
+interface CreateFieldModalProps {
+  isOpen: boolean;
+  fieldName: string;
+  setFieldName: (name: string) => void;
+  fieldSize: string;
+  setFieldSize: (size: string) => void;
+  fieldLocation: string;
+  setFieldLocation: (location: string) => void;
+  fieldImageUrl: string;
+  setFieldImageUrl: (url: string) => void;
+  isLoading: boolean;
+  error: string | null;
+  onClose: () => void;
+  onConfirm: () => void;
+}
+
+export function CreateFieldModal({
+  isOpen,
+  fieldName,
+  setFieldName,
+  fieldSize,
+  setFieldSize,
+  fieldLocation,
+  setFieldLocation,
+  fieldImageUrl,
+  setFieldImageUrl,
+  isLoading,
+  error,
+  onClose,
+  onConfirm,
+}: CreateFieldModalProps) {
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6">
+      <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0b0f14] p-6">
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="text-sm text-emerald-200">Nuovo campo</p>
+            <h3 className="text-xl font-semibold">Crea campo</h3>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="text-white/60 hover:text-white"
+            aria-label="Chiudi"
+          >
+            ✕
+          </button>
+        </div>
+
+        <div className="mt-6 space-y-4">
+          <Input
+            label="Nome campo"
+            value={fieldName}
+            onChange={(e) => setFieldName(e.target.value)}
+          />
+
+          <Input
+            label="Dimensione"
+            value={fieldSize}
+            onChange={(e) => setFieldSize(e.target.value)}
+          />
+
+          <Input
+            label="Luogo"
+            value={fieldLocation}
+            onChange={(e) => setFieldLocation(e.target.value)}
+          />
+
+          <Input
+            label="URL immagine"
+            value={fieldImageUrl}
+            onChange={(e) => setFieldImageUrl(e.target.value)}
+            type="url"
+          />
+
+          {error && (
+            <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
+              {error}
+            </div>
+          )}
+
+          <Button
+            variant="primary"
+            size="lg"
+            className="w-full rounded-full"
+            onClick={onConfirm}
+            disabled={isLoading}
+            isLoading={isLoading}
+          >
+            Crea campo
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

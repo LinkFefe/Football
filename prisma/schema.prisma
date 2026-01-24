@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  PLAYER
+  OWNER
+  ADMIN
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String
+  role         Role
+  createdAt    DateTime @default(now())
+
+  player Player?
+  owner  Owner?
+  admin  Admin?
+}
+
+model Player {
+  id      Int     @id @default(autoincrement())
+  userId  Int     @unique
+  user    User    @relation(fields: [userId], references: [id])
+  bookings Booking[]
+}
+
+model Owner {
+  id     Int    @id @default(autoincrement())
+  userId Int    @unique
+  user   User   @relation(fields: [userId], references: [id])
+  fields Field[]
+}
+
+model Admin {
+  id     Int  @id @default(autoincrement())
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Field {
+  id        Int      @id @default(autoincrement())
+  name      String
+  size      String
+  location  String?
+  imageUrl  String?
+  ownerId   Int
+  owner     Owner    @relation(fields: [ownerId], references: [id])
+  bookings  Booking[]
+}
+
+model Booking {
+  id        Int      @id @default(autoincrement())
+  startDate DateTime
+  endDate   DateTime
+  createdAt DateTime @default(now())
+
+  playerId Int
+  fieldId  Int
+
+  player Player @relation(fields: [playerId], references: [id])
+  field  Field  @relation(fields: [fieldId], references: [id])
+}

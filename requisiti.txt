@@ -1,0 +1,111 @@
+Genera una web app contenente:
+    - una home page visibile a tutti
+    - una pagina privata, accessibile dalla home page solo da chi completa correttamente il login per ciascuno stakeholder(utente, porprietario del campo, amministratore del sistema)
+La WebApp è per la prenotazione dei campetti da calcio.
+Voglio che tutta l’app abbia un design moderno, responsivo e intuitivo, adatto sia a desktop che a dispositivi mobili.
+
+Dal punto di vista del contesto operativo, il sistema coinvolge tre stakeholder principali:  
+o	Utente, che desidera prenotare un campo per attività sportive;  
+o	il Proprietario del Campo, che gestisce la disponibilità e le prenotazioni;  
+o	Amministratore di Sistema, responsabile del corretto funzionamento e della supervisione dell’intera piattaforma. L’interazione tra questi attori avviene attraverso procedure automatizzate e sicure, che garantiscono affidabilità e facilità d’uso; 
+La home page deve essere accessibile a tutti gli utenti, anche non registrati, e avere lo scopo di presentare l’applicazione, spiegandone in modo chiaro e semplice i vantaggi principali.
+La home page deve includere:
+•	una sezione introduttiva (hero section) con titolo e sottotitolo che descrivano il servizio di prenotazione online dei campetti da calcio;
+•	una sezione che evidenzi i vantaggi dell’app, come la facilità di utilizzo, la rapidità nella prenotazione, la disponibilità in tempo reale e la gestione centralizzata delle prenotazioni;
+•	una breve spiegazione di come funziona l’app (scegli il campo, seleziona data e orario, prenota in pochi click);
+•	una sezione con call-to-action (es. “Registrati”, “Accedi”) ben visibile;
+•	un design moderno, responsivo e intuitivo, adatto sia a desktop che a dispositivi mobili.
+
+RUOLO UTENTE
+Solo effetuando il login come utente si accede alla dashboard privata che voglio sia come l’immagine qui sotto:
+ 
+L’utente ha quindi menu ad hamburger che una volta cliccato apre una barra verticale in cui ha come campi del menu:
+-	dashboard, ovvero la sezione dove si trova attulmente
+-	profilo, per poter modificare il proprio profilo
+-	impostazioni, per modificare le impostazioni dell’app
+-	prenotazioni, per vedere le proprie prenotazioni e lo storico delle proprie prenotazioni
+La dashboard principale deve essere stilisticamente come quella in foto per poter vederer il proprio prossimo match, i campi  e un calendario per vedere le proprie prenotazioni. In alto la barra di benvenuto al centro, sotto a sinistra una card con la mia prenotazione attuale che una volta fatta contiente nome del campo e orario, a destra una griglia che contiene tante card con i campi disponibili con immagine del campo, nome e bottone per poter anadare alla prenotazione del campo e in basso un calendario nella quale vengono sengate le mie prenotazioni una volta effettuate
+
+RUOLO PROPRIETARIO DEL CAMPO
+Solo effettuando il login come proprietario del campo si accede alla dashboard privata che deve essere stilisticamente simile alla dashboard utente. Il proprietario del campo ha la possibilità di creare nuovi campi all’interno della applicazione e potere vedere le prenotazioni relative ai suoi campi. Il proprietario può vedere solo i suoi campi e le relative prenotazioni.
+
+RUOLO AMMINISTRATORE
+L’amministratore deve avere la possibilità di vedere tutti gli utenti, i campi presenti nell’app con i rispettivi proprietari e le relative prenotazioni. Deve quindi avere una visione globale dell’applicazione.
+
+
+ Inserisco qui la struttura del database:
+erDiagram
+    UTENTE {
+        int id_utente PK
+        string nome
+        string mail
+        string password
+    }
+
+    GIOCATORE {
+        int id_utente FK
+    }
+
+    PROPRIETARIO {
+        int id_utente FK
+    }
+
+    ADMIN {
+        int id_utente FK
+    }
+
+    PRENOTAZIONE {
+        int id_prenotazione PK
+        datetime data_inizio
+        datetime data_fine
+    }
+
+    CAMPO {
+        int id_campo PK
+        string grandezza
+    }
+
+    %% Generalizzazione
+    UTENTE ||--o{ GIOCATORE : "è un"
+    UTENTE ||--o{ PROPRIETARIO : "è un"
+    UTENTE ||--o{ ADMIN : "è un"
+
+    %% Relazioni
+    GIOCATORE ||--o{ PRENOTAZIONE : "effettua"
+    PROPRIETARIO ||--o{ PRENOTAZIONE : "gestisce"
+    CAMPO ||--o{ PRENOTAZIONE : "riferimento"
+
+Questa è la matrice goal-stakeholder:
+STAKEHOLDER 	GOAL 	SUBGOAL 	C 	R 	U 	D(L) 
+Giocatore 	Gestione Account 	Creazione nuovo account 	✓ 	 	 	 
+ 	 	Visualizzazione dati account 	 	✓ 	 	 
+ 	 	Modifica dati account 	 	 	✓ 	 
+ 	 	Eliminazione account 	 	 	 	✓ 
+ 	Gestione Prenotazione 	Creazione nuova prenotazione 	✓ 	 	 	 
+ 	 	Visualizzazione prenotazioni 	 	✓ 	 	 
+ 	 	Modifica prenotazione personale 	 	 	✓ 	 
+ 	 	Eliminazione prenotazione 	 	 	 	✓ 
+ 	Gestione Campo 	Visualizzazione dati campo 	 	✓ 	 	 
+Proprietario 	Gestione account 	Creazione nuovo account 	✓ 	 	 	 
+ 	 	Visualizzazione dati account 	 	✓ 	 	 
+ 	 	Modifica dati account 	 	 	✓ 	 
+ 	 	Eliminazione dati account 	 	 	 	✓ 
+ 	Gestione prenotazione 	Visualizzazione prenotazioni 	 	✓ 	 	 
+ 	Gestione campo 	Creazione campo 	✓ 	 	 	 
+ 	 	Visualizzazione campo 	 	✓ 	 	 
+ 	 	Modifica dati campo 	 	 	✓ 	 
+ 	 	Eliminazione campo 	 	 	 	✓ 
+Amministratore 	Gestione account 	Visualizzazione account utenti 	 	✓ 	 	 
+ 	Gestione campo 	Visualizzazione campi 	 	✓ 	 	 
+ 	Gestione prenotazioni 	Visualizzazione prenotazioni 	 	✓ 	 	 
+
+ 
+
+L'app deve contenere un footer e un header uguali in tutte le pagine.
+L’ app deve essere ben collegata ad un database.
+I dati di login devono essere registrati in un database sqlite, sul server.
+L'app deve essere basata sull’ultima versione disponibile di next.js
+La web app deve essere strutturata come una Single Page Application.
+La web app deve essere strutturata come il tutorial di questo link: https://nextjs.org/learn/dashboard-app/getting-started#creating-a-new-project
+
+
