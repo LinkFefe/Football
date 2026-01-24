@@ -4,6 +4,49 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
+    // Crea 50 campi con nomi, immagini e luoghi credibili assegnati casualmente agli owner
+    const fieldNames = [
+      'Arena Centrale', 'Stadio Nord', 'Parco Sud', 'Campo Ovest', 'Green Hills', 'River Side', 'Sunset Arena',
+      'City Arena', 'Lakeside', 'Stadium', 'East Park', 'Forest Field', 'Golden Field', 'Blue Arena', 'Red Stadium',
+      'Silver Park', 'Mountain Field', 'Village Arena', 'Beach Field', 'Urban Arena', 'Royal Stadium', 'Sunrise Park',
+      'West Arena', 'Central Field', 'Liberty Arena', 'Victory Park', 'Dream Field', 'Star Stadium', 'Sky Arena',
+      'Ocean Park', 'Sunshine Field', 'Thunder Arena', 'Windy Park', 'Crystal Field', 'Shadow Stadium', 'Fire Arena',
+      'Ice Park', 'Emerald Field', 'Diamond Arena', 'Platinum Park', 'Amber Field', 'Pearl Stadium', 'Coral Arena',
+      'Ruby Park', 'Sapphire Field', 'Opal Arena', 'Topaz Park', 'Onyx Field', 'Quartz Arena', 'Zenith Park'
+    ];
+    const locations = [
+      'Centro Città', 'Zona Nord', 'Zona Sud', 'Zona Ovest', 'Colline', 'Lungo Fiume', 'Zona Est', 'Centro', 'Lago',
+      'Stadio', 'Bosco', 'Quartiere Oro', 'Zona Blu', 'Zona Rossa', 'Zona Argento', 'Montagna', 'Villaggio', 'Spiaggia',
+      'Zona Urbana', 'Zona Reale', 'Zona Alba', 'Zona Ovest', 'Centro', 'Quartiere Verde', 'Zona Industriale', 'Zona Antica',
+      'Zona Nuova', 'Zona Porto', 'Zona Aeroporto', 'Zona Mercato', 'Zona Fiera', 'Zona Università', 'Zona Sportiva',
+      'Zona Residenziale', 'Zona Commerciale', 'Zona Artigiana', 'Zona Marina', 'Zona Collinare', 'Zona Panoramica',
+      'Zona Centrale', 'Zona Periferica', 'Zona Monumentale', 'Zona Parco', 'Zona Giardino', 'Zona Piazza', 'Zona Castello',
+      'Zona Museo', 'Zona Teatro', 'Zona Biblioteca', 'Zona Torre'
+    ];
+    const sizes = ['5v5', '7v7', '9v9'];
+    const imageUrls = ['/images/field-1.svg', '/images/field-2.svg', '/images/field-3.svg'];
+
+    const owners = await prisma.owner.findMany();
+    for (let i = 0; i < 50; i++) {
+      const name = fieldNames[i % fieldNames.length];
+      const location = locations[i % locations.length];
+      const size = sizes[i % sizes.length];
+      const imageUrl = imageUrls[i % imageUrls.length];
+      const owner = owners[Math.floor(Math.random() * owners.length)];
+      // Evita duplicati per nome e ownerId
+      const existing = await prisma.field.findFirst({ where: { name, ownerId: owner.id } });
+      if (!existing) {
+        await prisma.field.create({
+          data: {
+            name,
+            size,
+            location,
+            imageUrl,
+            ownerId: owner.id,
+          },
+        });
+      }
+    }
   const password = await bcrypt.hash('Password123!', 10);
 
   // Crea manualmente 24 proprietari
