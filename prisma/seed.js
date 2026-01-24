@@ -6,6 +6,50 @@ const prisma = new PrismaClient();
 async function main() {
   const password = await bcrypt.hash('Password123!', 10);
 
+  // Crea manualmente 24 proprietari
+  const ownerNames = [
+    'Giulio', 'Martina', 'Sofia', 'Alessia', 'Davide', 'Sara', 'Lorenzo', 'Chiara', 'Marta', 'Valerio',
+    'Elena', 'Fabio', 'Ilaria', 'Giorgio', 'Francesca', 'Alberto', 'Veronica', 'Stefania', 'Claudio', 'Roberta',
+    'Michela', 'Stefano', 'Giuliana', 'Alessandro'
+  ];
+
+  for (const name of ownerNames) {
+    await prisma.user.upsert({
+      where: { email: `${name.toLowerCase()}@gmail.com` },
+      update: {},
+      create: {
+        name,
+        email: `${name.toLowerCase()}@gmail.com`,
+        passwordHash: password,
+        role: 'OWNER',
+        owner: { create: {} },
+      },
+      include: { owner: true },
+    });
+  }
+
+  // Crea manualmente 30 giocatori
+  const playerNames = [
+    'Luca', 'Giovanni', 'Francesco', 'Matteo', 'Alessandro', 'Andrea', 'Gabriele', 'Leonardo', 'Davide', 'Riccardo',
+    'Tommaso', 'Federico', 'Giuseppe', 'Antonio', 'Simone', 'Emanuele', 'Christian', 'Samuele', 'Filippo', 'Alberto',
+    'Stefano', 'Michele', 'Daniele', 'Nicola', 'Pietro', 'Salvatore', 'Marco', 'Roberto', 'Paolo', 'Enrico'
+  ];
+
+  for (const name of playerNames) {
+    await prisma.user.upsert({
+      where: { email: `${name.toLowerCase()}@gmail.com` },
+      update: {},
+      create: {
+        name,
+        email: `${name.toLowerCase()}@gmail.com`,
+        passwordHash: password,
+        role: 'PLAYER',
+        player: { create: {} },
+      },
+      include: { player: true },
+    });
+  }
+
   const playerUser = await prisma.user.upsert({
     where: { email: 'alex@gmail.com' },
     update: {},
