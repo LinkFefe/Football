@@ -23,7 +23,7 @@ export function OwnerFieldManagementList({
           variant="primary"
           size="sm"
           onClick={onCreateClick}
-          className="rounded-full bg-emerald-400/10 text-emerald-200 border border-emerald-400/30"
+          className="rounded-full bg-emerald-400/10 text-emerald-50 border border-emerald-400/30"
         >
           Crea nuovo campo
         </Button>
