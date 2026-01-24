@@ -120,7 +120,7 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
 
             {/* 4. Calendar */}
             <PlayerCalendarCard 
-                calendarDays={calendarDays} 
+              bookings={playerBookings}
             />
           </div>
         )}

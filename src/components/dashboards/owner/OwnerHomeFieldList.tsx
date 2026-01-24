@@ -41,7 +41,10 @@ export function OwnerHomeFieldList({ fields, onInfoClick }: OwnerHomeFieldListPr
                 >
                   <span>{b.player.user.name}</span>
                   <span className="text-xs text-white/60">
-                    {new Date(b.startDate).toLocaleDateString()}
+                    {new Date(b.startDate).toLocaleDateString()}<br />
+                    {new Date(b.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                    {' - '}
+                    {new Date(b.endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
               ))}

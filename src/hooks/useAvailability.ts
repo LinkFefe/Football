@@ -2,21 +2,26 @@ import { useMemo } from "react";
 import { BookingItem } from "@/lib/types";
 
 // Calcola i giorni del calendario con prenotazioni
-export function useCalendarDays(bookings: BookingItem[]) {
+export function useCalendarDays(bookings: BookingItem[], month?: number, year?: number) {
   return useMemo(() => {
     const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const selYear = typeof year === "number" ? year : now.getFullYear();
+    const selMonth = typeof month === "number" ? month : now.getMonth();
+    const daysInMonth = new Date(selYear, selMonth + 1, 0).getDate();
+    // Solo prenotazioni del mese/anno selezionato
     const bookingDays = new Set(
-      bookings.map((booking) => new Date(booking.startDate).getDate())
+      bookings
+        .filter((booking) => {
+          const d = new Date(booking.startDate);
+          return d.getFullYear() === selYear && d.getMonth() === selMonth;
+        })
+        .map((booking) => new Date(booking.startDate).getDate())
     );
-
     return Array.from({ length: daysInMonth }, (_, index) => {
       const day = index + 1;
       return { day, hasBooking: bookingDays.has(day) };
     });
-  }, [bookings]);
+  }, [bookings, month, year]);
 }
 
 // Calcola la prossima prenotazione
