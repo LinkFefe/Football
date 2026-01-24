@@ -4,49 +4,51 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-    // Crea 50 campi con nomi, immagini e luoghi credibili assegnati casualmente agli owner
-    const fieldNames = [
-      'Arena Centrale', 'Stadio Nord', 'Parco Sud', 'Campo Ovest', 'Green Hills', 'River Side', 'Sunset Arena',
-      'City Arena', 'Lakeside', 'Stadium', 'East Park', 'Forest Field', 'Golden Field', 'Blue Arena', 'Red Stadium',
-      'Silver Park', 'Mountain Field', 'Village Arena', 'Beach Field', 'Urban Arena', 'Royal Stadium', 'Sunrise Park',
-      'West Arena', 'Central Field', 'Liberty Arena', 'Victory Park', 'Dream Field', 'Star Stadium', 'Sky Arena',
-      'Ocean Park', 'Sunshine Field', 'Thunder Arena', 'Windy Park', 'Crystal Field', 'Shadow Stadium', 'Fire Arena',
-      'Ice Park', 'Emerald Field', 'Diamond Arena', 'Platinum Park', 'Amber Field', 'Pearl Stadium', 'Coral Arena',
-      'Ruby Park', 'Sapphire Field', 'Opal Arena', 'Topaz Park', 'Onyx Field', 'Quartz Arena', 'Zenith Park'
-    ];
-    const locations = [
-      'Centro Città', 'Zona Nord', 'Zona Sud', 'Zona Ovest', 'Colline', 'Lungo Fiume', 'Zona Est', 'Centro', 'Lago',
-      'Stadio', 'Bosco', 'Quartiere Oro', 'Zona Blu', 'Zona Rossa', 'Zona Argento', 'Montagna', 'Villaggio', 'Spiaggia',
-      'Zona Urbana', 'Zona Reale', 'Zona Alba', 'Zona Ovest', 'Centro', 'Quartiere Verde', 'Zona Industriale', 'Zona Antica',
-      'Zona Nuova', 'Zona Porto', 'Zona Aeroporto', 'Zona Mercato', 'Zona Fiera', 'Zona Università', 'Zona Sportiva',
-      'Zona Residenziale', 'Zona Commerciale', 'Zona Artigiana', 'Zona Marina', 'Zona Collinare', 'Zona Panoramica',
-      'Zona Centrale', 'Zona Periferica', 'Zona Monumentale', 'Zona Parco', 'Zona Giardino', 'Zona Piazza', 'Zona Castello',
-      'Zona Museo', 'Zona Teatro', 'Zona Biblioteca', 'Zona Torre'
-    ];
-    const sizes = ['5v5', '7v7', '9v9'];
-    const imageUrls = ['/images/field-1.svg', '/images/field-2.svg', '/images/field-3.svg'];
+  
+  // Crea 50 campi con nomi, immagini e luoghi credibili assegnati casualmente agli owner
+  const fieldNames = [
+    'Arena Centrale', 'Stadio Nord', 'Parco Sud', 'Campo Ovest', 'Green Hills', 'River Side', 'Sunset Arena',
+    'City Arena', 'Lakeside', 'Stadium', 'East Park', 'Forest Field', 'Golden Field', 'Blue Arena', 'Red Stadium',
+    'Silver Park', 'Mountain Field', 'Village Arena', 'Beach Field', 'Urban Arena', 'Royal Stadium', 'Sunrise Park',
+    'West Arena', 'Central Field', 'Liberty Arena', 'Victory Park', 'Dream Field', 'Star Stadium', 'Sky Arena',
+    'Ocean Park', 'Sunshine Field', 'Thunder Arena', 'Windy Park', 'Crystal Field', 'Shadow Stadium', 'Fire Arena',
+    'Ice Park', 'Emerald Field', 'Diamond Arena', 'Platinum Park', 'Amber Field', 'Pearl Stadium', 'Coral Arena',
+    'Ruby Park', 'Sapphire Field', 'Opal Arena', 'Topaz Park', 'Onyx Field', 'Quartz Arena', 'Zenith Park'
+  ];
+  const locations = [
+    'Centro Città', 'Zona Nord', 'Zona Sud', 'Zona Ovest', 'Colline', 'Lungo Fiume', 'Zona Est', 'Centro', 'Lago',
+    'Stadio', 'Bosco', 'Quartiere Oro', 'Zona Blu', 'Zona Rossa', 'Zona Argento', 'Montagna', 'Villaggio', 'Spiaggia',
+    'Zona Urbana', 'Zona Reale', 'Zona Alba', 'Zona Ovest', 'Centro', 'Quartiere Verde', 'Zona Industriale', 'Zona Antica',
+    'Zona Nuova', 'Zona Porto', 'Zona Aeroporto', 'Zona Mercato', 'Zona Fiera', 'Zona Università', 'Zona Sportiva',
+    'Zona Residenziale', 'Zona Commerciale', 'Zona Artigiana', 'Zona Marina', 'Zona Collinare', 'Zona Panoramica',
+    'Zona Centrale', 'Zona Periferica', 'Zona Monumentale', 'Zona Parco', 'Zona Giardino', 'Zona Piazza', 'Zona Castello',
+    'Zona Museo', 'Zona Teatro', 'Zona Biblioteca', 'Zona Torre'
+  ];
+  const sizes = ['5v5', '7v7', '9v9'];
+  const imageUrls = ['/images/field-1.svg', '/images/field-2.svg', '/images/field-3.svg'];
 
-    const owners = await prisma.owner.findMany();
-    for (let i = 0; i < 50; i++) {
-      const name = fieldNames[i % fieldNames.length];
-      const location = locations[i % locations.length];
-      const size = sizes[i % sizes.length];
-      const imageUrl = imageUrls[i % imageUrls.length];
-      const owner = owners[Math.floor(Math.random() * owners.length)];
-      // Evita duplicati per nome e ownerId
-      const existing = await prisma.field.findFirst({ where: { name, ownerId: owner.id } });
-      if (!existing) {
-        await prisma.field.create({
-          data: {
-            name,
-            size,
-            location,
-            imageUrl,
-            ownerId: owner.id,
-          },
-        });
-      }
+  const owners = await prisma.owner.findMany();
+  for (let i = 0; i < 50; i++) {
+    const name = fieldNames[i % fieldNames.length];
+    const location = locations[i % locations.length];
+    const size = sizes[i % sizes.length];
+    const imageUrl = imageUrls[i % imageUrls.length];
+    const owner = owners[Math.floor(Math.random() * owners.length)];
+    // Evita duplicati per nome e ownerId
+    const existing = await prisma.field.findFirst({ where: { name, ownerId: owner.id } });
+    if (!existing) {
+      await prisma.field.create({
+        data: {
+          name,
+          size,
+          location,
+          imageUrl,
+          ownerId: owner.id,
+        },
+      });
     }
+  }
+  
   const password = await bcrypt.hash('Password123!', 10);
 
   // Crea manualmente 24 proprietari
@@ -131,203 +133,76 @@ async function main() {
     },
   });
 
-  const field1 = await prisma.field.upsert({
-    where: { id: 1 },
-    update: {
-      name: 'Central Park Field 1',
-      size: '5v5',
-      location: 'Centro Città',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'Central Park Field 1',
-      size: '5v5',
-      location: 'Centro Città',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
 
-  const field2 = await prisma.field.upsert({
-    where: { id: 2 },
-    update: {
-      name: 'River Side Field 2',
-      size: '7v7',
-      location: 'Zona Nord',
-      imageUrl: '/images/field-2.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'River Side Field 2',
-      size: '7v7',
-      location: 'Zona Nord',
-      imageUrl: '/images/field-2.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 3 },
-    update: {
-      name: 'Arena Field 3',
-      size: '9v9',
-      location: 'Zona Sud',
-      imageUrl: '/images/field-3.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'Arena Field 3',
-      size: '9v9',
-      location: 'Zona Sud',
-      imageUrl: '/images/field-3.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 4 },
-    update: {
-      name: 'Green Hills Field 4',
-      size: '5v5',
-      location: 'Zona Ovest',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'Green Hills Field 4',
-      size: '5v5',
-      location: 'Zona Ovest',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 5 },
-    update: {
-      name: 'City Arena Field 5',
-      size: '7v7',
-      location: 'Centro',
-      imageUrl: '/images/field-2.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'City Arena Field 5',
-      size: '7v7',
-      location: 'Centro',
-      imageUrl: '/images/field-2.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 6 },
-    update: {
-      name: 'Lakeside Field 6',
-      size: '9v9',
-      location: 'Lago',
-      imageUrl: '/images/field-3.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'Lakeside Field 6',
-      size: '9v9',
-      location: 'Lago',
-      imageUrl: '/images/field-3.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 7 },
-    update: {
-      name: 'Riverside Field 7',
-      size: '5v5',
-      location: 'Zona Nord',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'Riverside Field 7',
-      size: '5v5',
-      location: 'Zona Nord',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 8 },
-    update: {
-      name: 'Sunset Field 8',
-      size: '7v7',
-      location: 'Zona Est',
-      imageUrl: '/images/field-2.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'Sunset Field 8',
-      size: '7v7',
-      location: 'Zona Est',
-      imageUrl: '/images/field-2.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 9 },
-    update: {
-      name: 'Stadium Field 9',
-      size: '9v9',
-      location: 'Stadio',
-      imageUrl: '/images/field-3.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'Stadium Field 9',
-      size: '9v9',
-      location: 'Stadio',
-      imageUrl: '/images/field-3.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
-  await prisma.field.upsert({
-    where: { id: 10 },
-    update: {
-      name: 'East Park Field 10',
-      size: '5v5',
-      location: 'Zona Est',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-    create: {
-      name: 'East Park Field 10',
-      size: '5v5',
-      location: 'Zona Est',
-      imageUrl: '/images/field-1.svg',
-      ownerId: ownerUser.owner.id,
-    },
-  });
-
+  // --- GENERAZIONE 80 PRENOTAZIONI CASUALI, EQUAMENTE DISTRIBUITE, SENZA SOVRAPPOSIZIONI ---
   await prisma.booking.deleteMany();
-  await prisma.booking.createMany({
-    data: [
-      {
-        startDate: new Date(Date.now() + 1000 * 60 * 60 * 24),
-        endDate: new Date(Date.now() + 1000 * 60 * 60 * 26),
-        playerId: playerUser.player.id,
-        fieldId: field1.id,
-      },
-      {
-        startDate: new Date(Date.now() + 1000 * 60 * 60 * 48),
-        endDate: new Date(Date.now() + 1000 * 60 * 60 * 50),
-        playerId: playerUser.player.id,
-        fieldId: field2.id,
-      },
-    ],
-  });
+
+  // Prendi tutti i player e tutti i campi
+  const players = await prisma.player.findMany();
+  const fields = await prisma.field.findMany();
+  if (players.length === 0 || fields.length === 0) {
+    console.log('Nessun player o campo trovato, impossibile generare prenotazioni.');
+    return;
+  }
+
+  // Parametri orari
+  const startHour = 8;
+  const endHour = 21.5; // 21:30
+  const durations = [60, 90]; // minuti
+  const minuteOptions = [0, 30];
+
+  // Mappa per evitare sovrapposizioni: { [fieldId_date]: [ {start, end} ] }
+  const bookingsMap = {};
+  const bookings = [];
+  const today = new Date();
+  // Genera prenotazioni su 10 giorni futuri
+  for (let i = 0; i < 80; i++) {
+    let tries = 0;
+    let created = false;
+    while (!created && tries < 100) {
+      tries++;
+      // Scegli player e campo in modo equo
+      const player = players[i % players.length];
+      const field = fields[i % fields.length];
+      // Giorno random tra oggi e 10 giorni dopo
+      const dayOffset = Math.floor(Math.random() * 10);
+      const date = new Date(today);
+      date.setDate(today.getDate() + dayOffset);
+      date.setHours(0, 0, 0, 0);
+      // Ora e minuti random validi
+      const hour = startHour + Math.floor(Math.random() * ((endHour - startHour) * 2 + 1)) / 2;
+      const minute = minuteOptions[Math.floor(Math.random() * minuteOptions.length)];
+      const duration = durations[Math.floor(Math.random() * durations.length)];
+      const start = new Date(date);
+      start.setHours(Math.floor(hour), minute, 0, 0);
+      const end = new Date(start);
+      end.setMinutes(start.getMinutes() + duration);
+      // Non superare le 23:00
+      if (end.getHours() > 23 || (end.getHours() === 23 && end.getMinutes() > 0)) continue;
+      // Chiave per mappa sovrapposizioni
+      const key = `${field.id}_${date.toISOString().slice(0, 10)}`;
+      if (!bookingsMap[key]) bookingsMap[key] = [];
+      // Controlla sovrapposizioni
+      const overlap = bookingsMap[key].some(b =>
+        (start < b.end && end > b.start)
+      );
+      if (overlap) continue;
+      // Ok, aggiungi
+      bookingsMap[key].push({ start, end });
+      bookings.push({
+        startDate: start,
+        endDate: end,
+        playerId: player.id,
+        fieldId: field.id,
+      });
+      created = true;
+    }
+    if (!created) {
+      console.log(`Impossibile creare la prenotazione ${i + 1} senza sovrapposizioni.`);
+    }
+  }
+  await prisma.booking.createMany({ data: bookings });
+  console.log(`Prenotazioni create: ${bookings.length}`);
 }
 
 main()
