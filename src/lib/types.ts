@@ -22,6 +22,8 @@ export type FieldItem = {
   size: string;
   location?: string | null;
   imageUrl?: string | null;
+  ownerName?: string; // Solo per admin
+  ownerEmail?: string; // Solo per admin
 };
 
 export type BookingItem = {

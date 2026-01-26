@@ -33,6 +33,14 @@ export function AdminFieldList({ fields, onDeleteField }: AdminFieldListProps) {
             <div className="space-y-1">
               <p className="text-sm font-semibold text-white">{field.name}</p>
               <p className="text-xs text-white/60">{field.size} · {field.location ?? "N/A"}</p>
+              {(field.ownerName || field.ownerEmail) && (
+                <p className="text-xs text-emerald-300 mt-1">
+                  Proprietario: {field.ownerName}
+                  {field.ownerEmail && (
+                    <span className="text-white/70"> &lt;{field.ownerEmail}&gt;</span>
+                  )}
+                </p>
+              )}
             </div>
             <Button
               variant="danger"

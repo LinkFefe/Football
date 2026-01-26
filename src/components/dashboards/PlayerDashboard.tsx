@@ -26,6 +26,12 @@ interface PlayerDashboardProps {
 }
 
 export function PlayerDashboard({ session, dashboard, reloadData, setSession }: PlayerDashboardProps) {
+    // Funzione per eliminare il profilo e reindirizzare
+    const handleDeleteProfileAndRedirect = () => {
+      profile.handleProfileDelete(session.id, () => {
+        window.location.href = "/";
+      });
+    };
   const bookings = useBookings();
   const profile = useProfile();
   const { isOpen, close } = useSidebar();
@@ -149,7 +155,31 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
         )}
       </div>
 
-      {/* --- MODALI (Tenute nel Parent per gestire lo stato globale) --- */}
+      {/* Modale conferma eliminazione profilo */}
+      {profile.deleteProfileConfirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
+          <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-[#0b0f14] p-6">
+            <h3 className="text-lg font-semibold text-white mb-2">Conferma eliminazione profilo</h3>
+            <p className="text-white/70 mb-4">Sei sicuro di voler eliminare il tuo profilo? Questa azione è irreversibile.</p>
+            <div className="flex gap-4 justify-end">
+              <button
+                className="rounded-full bg-red-500/20 px-4 py-2 text-red-200 font-semibold hover:bg-red-500/40"
+                onClick={handleDeleteProfileAndRedirect}
+                disabled={profile.deleteProfileLoading}
+              >
+                {profile.deleteProfileLoading ? "Eliminazione..." : "Elimina"}
+              </button>
+              <button
+                className="rounded-full bg-white/10 px-4 py-2 text-white font-semibold hover:bg-white/20"
+                onClick={() => profile.setDeleteProfileConfirmOpen(false)}
+                disabled={profile.deleteProfileLoading}
+              >
+                Annulla
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modale Info Campo (aperta dalla PlayerFieldList) */}
       {selectedField && (

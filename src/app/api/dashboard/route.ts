@@ -77,7 +77,18 @@ export async function GET(request: Request) {
     // Gestisce il ruolo dell'amministratore
     if (role === "ADMIN") {
       const users = await prisma.user.findMany({ orderBy: { createdAt: "desc" } }); // Recupera tutti gli utenti
-      const fields = await prisma.field.findMany({ include: { owner: { include: { user: true } } } }); // Recupera tutti i campi con i rispettivi proprietari
+      // Recupera tutti i campi con i rispettivi proprietari
+      const fieldsRaw = await prisma.field.findMany({ include: { owner: { include: { user: true } } } });
+      // Mappa i campi per includere il nome e l'email del proprietario
+      const fields = fieldsRaw.map(f => ({
+        id: f.id,
+        name: f.name,
+        size: f.size,
+        location: f.location,
+        imageUrl: f.imageUrl,
+        ownerName: f.owner?.user?.name ?? "N/A",
+        ownerEmail: f.owner?.user?.email ?? "N/A"
+      }));
       const bookings = await prisma.booking.findMany({ // Recupera tutte le prenotazioni
         include: {
           field: true,
