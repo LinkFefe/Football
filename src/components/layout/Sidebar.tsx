@@ -1,15 +1,17 @@
-"use client";
+"use client"; // Abilita il rendering lato client
 
-import React from "react";
+import React from "react"; // Importa React
 
+// Definisci le proprietà del componente Sidebar
 interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-  activeSection: string;
-  onSectionChange: (section: string) => void;
-  sections: string[];
+  isOpen: boolean; // Stato di apertura della sidebar
+  onClose: () => void; // Funzione per chiudere la sidebar
+  activeSection: string; // Sezione attiva corrente
+  onSectionChange: (section: string) => void; // Funzione per cambiare la sezione attiva
+  sections: string[]; // Elenco delle sezioni disponibili
 }
 
+// Componente Sidebar
 export function Sidebar({
   isOpen,
   onClose,

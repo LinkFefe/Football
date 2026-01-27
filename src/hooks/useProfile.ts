@@ -1,8 +1,9 @@
 import { useState, useCallback } from "react";
 import { Session } from "@/lib/types";
 
+// Hook personalizzato per la gestione del profilo utente
 export function useProfile() {
-  const [showProfileForm, setShowProfileForm] = useState(false);
+  const [showProfileForm, setShowProfileForm] = useState(false); // Stato per mostrare/nascondere il modulo del profilo
   const [profileName, setProfileName] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -11,6 +12,7 @@ export function useProfile() {
   const [profileSuccess, setProfileSuccess] = useState<string | null>(null);
   const [profileLoading, setProfileLoading] = useState(false);
 
+  // Stati per l'eliminazione del profilo
   const [deleteProfileConfirmOpen, setDeleteProfileConfirmOpen] = useState(false);
   const [deleteProfileLoading, setDeleteProfileLoading] = useState(false);
 
@@ -22,16 +24,16 @@ export function useProfile() {
       oldPass: string | undefined,
       newPass: string | undefined,
       confirmPass: string | undefined,
-      onSuccess: (updatedSession: Session) => void
+      onSuccess: (updatedSession: Session) => void // Callback di successo
     ) => {
-      if (newPass && newPass !== confirmPass) {
+      if (newPass && newPass !== confirmPass) { // Verifica che le nuove password coincidano
         setProfileError("Le nuove password non coincidono.");
         return false;
       }
 
       setProfileLoading(true);
-      setProfileError(null);
-      setProfileSuccess(null);
+      setProfileError(null); // Resetta l'errore
+      setProfileSuccess(null); // Resetta il successo
 
       try {
         const response = await fetch("/api/profile", {
@@ -51,12 +53,12 @@ export function useProfile() {
           return false;
         }
 
-        const data = (await response.json()) as Session;
+        const data = (await response.json()) as Session; /// Ottieni la sessione aggiornata
         setProfileSuccess("Profilo aggiornato.");
         setOldPassword("");
         setNewPassword("");
         setConfirmPassword("");
-        onSuccess(data);
+        onSuccess(data); // Chiama la callback di successo con la sessione aggiornata
         return true;
       } finally {
         setProfileLoading(false);

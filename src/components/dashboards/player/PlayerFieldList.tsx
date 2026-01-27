@@ -45,6 +45,10 @@ export function PlayerFieldList({ fields, onBook, onInfo }: PlayerFieldListProps
               <p className="text-xs text-white/60">
                 {field.size} · {field.location ?? "Centro città"}
               </p>
+              <p className="text-xs text-white/60 mt-1">
+                Proprietario: {field.ownerName ?? "N/D"}<br />
+                Email: {field.ownerEmail ?? "N/D"}
+              </p>
             </div>
             <div className="mt-3 flex gap-2">
               <Button

@@ -22,8 +22,8 @@ export type FieldItem = {
   size: string;
   location?: string | null;
   imageUrl?: string | null;
-  ownerName?: string; // Solo per admin
-  ownerEmail?: string; // Solo per admin
+  ownerName?: string; 
+  ownerEmail?: string; 
 };
 
 export type BookingItem = {
@@ -31,7 +31,7 @@ export type BookingItem = {
   startDate: string;
   endDate: string;
   createdAt?: string;
-  field: { name: string; size: string; imageUrl?: string | null };
+  field: { id: number; name: string; size: string; location?: string | null; imageUrl?: string | null };
 };
 
 export type AdminBookingItem = {
@@ -42,6 +42,7 @@ export type AdminBookingItem = {
   player: { user: { name: string } };
 };
 
+// Tipo per i dati della dashboard
 export type DashboardData = {
   user?: {
     name: string;
@@ -67,6 +68,6 @@ export type DashboardData = {
       }>;
     }>;
   } | null;
-  users?: UserItem[];
-  bookings?: AdminBookingItem[];
+  users?: UserItem[]; // Solo per admin
+  bookings?: AdminBookingItem[]; // Solo per admin
 };

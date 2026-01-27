@@ -5,6 +5,7 @@ import { FieldItem } from "@/lib/types";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
+// Definisci le proprietà del componente FieldModal
 interface FieldModalProps {
   field: FieldItem | null; 
   fieldName: string;
@@ -21,6 +22,7 @@ interface FieldModalProps {
   onConfirm: () => void;
 }
 
+// Componente FieldModal
 export function FieldModal({
   field,
   fieldName,
@@ -38,6 +40,7 @@ export function FieldModal({
 }: FieldModalProps) {
   if (!field) return null;
 
+  // Renderizza il modal di modifica campo
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6">
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0b0f14] p-6">
@@ -84,7 +87,7 @@ export function FieldModal({
 
           {error && (
             <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              {error}
+              {error} 
             </div>
           )}
 

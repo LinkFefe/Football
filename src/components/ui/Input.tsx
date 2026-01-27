@@ -1,13 +1,15 @@
 "use client";
 
-import React from "react";
+import React from "react"; // Importa React
 
+// Definisci le proprietà del componente Input
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
-  error?: string | null;
-  helperText?: string;
+  label?: string; // Etichetta opzionale
+  error?: string | null; 
+  helperText?: string; // Testo di aiuto opzionale
 }
 
+// Componente Input
 export function Input({
   label,
   error,
@@ -16,8 +18,9 @@ export function Input({
   className = "",
   ...props
 }: InputProps) {
-  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`; // Genera un ID unico se non fornito
 
+  // Ritorna l'input con etichetta, messaggi di errore e aiuto
   return (
     <div className="space-y-1.5">
       {label && (

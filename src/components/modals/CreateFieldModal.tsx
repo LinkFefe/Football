@@ -4,10 +4,11 @@ import React from "react";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
+// Definisci le proprietà del componente CreateFieldModal
 interface CreateFieldModalProps {
-  isOpen: boolean;
-  fieldName: string;
-  setFieldName: (name: string) => void;
+  isOpen: boolean; // Indica se il modal è aperto
+  fieldName: string; // Nome del campo
+  setFieldName: (name: string) => void; // Funzione per aggiornare il nome del campo
   fieldSize: string;
   setFieldSize: (size: string) => void;
   fieldLocation: string;
@@ -20,6 +21,7 @@ interface CreateFieldModalProps {
   onConfirm: () => void;
 }
 
+// Componente CreateFieldModal
 export function CreateFieldModal({
   isOpen,
   fieldName,
@@ -92,7 +94,7 @@ export function CreateFieldModal({
             size="lg"
             className="w-full rounded-full"
             onClick={onConfirm}
-            disabled={isLoading}
+            disabled={isLoading} 
             isLoading={isLoading}
           >
             Crea campo

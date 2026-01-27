@@ -65,7 +65,7 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
     if (!fields.editingField) return;
     await fields.confirmEditField(
       session.id, fields.editingField.id, fields.fieldName,
-      fields.fieldSize, fields.fieldLocation, reloadData
+      fields.fieldSize, fields.fieldLocation, fields.fieldImageUrl, reloadData
     );
   };
 
@@ -222,8 +222,8 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
         setFieldSize={fields.setFieldSize}
         fieldLocation={fields.fieldLocation}
         setFieldLocation={fields.setFieldLocation}
-        fieldImageUrl={fields.createFieldImageUrl}
-        setFieldImageUrl={fields.setCreateFieldImageUrl}
+        fieldImageUrl={fields.fieldImageUrl}
+        setFieldImageUrl={fields.setFieldImageUrl}
         isLoading={fields.fieldLoading}
         error={fields.fieldError}
         onClose={() => fields.setEditingField(null)} // Funzione di chiusura

@@ -1,14 +1,15 @@
-"use client";
+"use client"; // Abilita il rendering lato client
 
-import React from "react";
+import React from "react"; // Importa React
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { Card } from "@/components/ui/Card";
 
+// Definisci le proprietà del componente ProfileSettingsForm
 interface ProfileSettingsFormProps {
   // Stati dei campi
   profileName: string;
-  setProfileName: (value: string) => void;
+  setProfileName: (value: string) => void; 
   oldPassword: string;
   setOldPassword: (value: string) => void;
   newPassword: string;
@@ -18,17 +19,18 @@ interface ProfileSettingsFormProps {
 
   // Stati di visualizzazione e feedback
   showForm: boolean;
-  setShowForm: (value: boolean | ((prev: boolean) => boolean)) => void;
+  setShowForm: (value: boolean | ((prev: boolean) => boolean)) => void; // Permette di mostrare o nascondere il form
   loading: boolean;
   deleteLoading: boolean;
   error: string | null;
   success: string | null;
 
   // Gestori eventi
-  onSave: (event: React.FormEvent) => void;
-  onDeleteRequest: () => void;
+  onSave: (event: React.FormEvent) => void; // Gestore del salvataggio delle modifiche
+  onDeleteRequest: () => void; // Gestore della richiesta di eliminazione del profilo
 }
 
+// Componente ProfileSettingsForm
 export function ProfileSettingsForm({
   profileName,
   setProfileName,
@@ -54,7 +56,7 @@ export function ProfileSettingsForm({
         <Button
           variant="secondary"
           size="sm"
-          onClick={() => setShowForm((prev) => !prev)}
+          onClick={() => setShowForm((prev) => !prev)} 
           className="rounded-xl border border-white/10 text-white/70 hover:border-emerald-300 hover:text-white"
         >
           {showForm ? "Chiudi modifica" : "Modifica Profilo"}
@@ -67,7 +69,7 @@ export function ProfileSettingsForm({
         </p>
       ) : (
         <form
-          onSubmit={onSave}
+          onSubmit={onSave} // Gestore del salvataggio delle modifiche
           className="mt-6 rounded-3xl border border-white/10 bg-[#0b0f14]/70 p-6"
         >
           <h4 className="text-base font-semibold text-white mb-4">Profilo</h4>
@@ -75,35 +77,35 @@ export function ProfileSettingsForm({
             <Input
               label="Nome"
               value={profileName}
-              onChange={(event) => setProfileName(event.target.value)}
+              onChange={(event) => setProfileName(event.target.value)} // Aggiorna il nome del profilo
               className="bg-[#0b0f14]/80"
             />
             <Input
               label="Password attuale"
               type="password"
               value={oldPassword}
-              onChange={(event) => setOldPassword(event.target.value)}
+              onChange={(event) => setOldPassword(event.target.value)} // Aggiorna la password attuale
               className="bg-[#0b0f14]/80"
             />
             <Input
               label="Nuova password"
               type="password"
               value={newPassword}
-              onChange={(event) => setNewPassword(event.target.value)}
+              onChange={(event) => setNewPassword(event.target.value)} // Aggiorna la nuova password
               className="bg-[#0b0f14]/80"
             />
             <Input
               label="Conferma nuova password"
               type="password"
               value={confirmPassword}
-              onChange={(event) => setConfirmPassword(event.target.value)}
+              onChange={(event) => setConfirmPassword(event.target.value)} // Aggiorna la conferma della nuova password
               className="bg-[#0b0f14]/80"
             />
           </div>
 
           {error && (
             <p className="mt-4 rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              {error}
+              {error} 
             </p>
           )}
           
@@ -124,7 +126,7 @@ export function ProfileSettingsForm({
           
           <Button
             type="button"
-            variant="danger"
+            variant="danger" 
             isLoading={deleteLoading}
             onClick={onDeleteRequest}
             className="mt-3 w-full rounded-full bg-red-500/15 font-semibold text-red-200 hover:border-red-400"

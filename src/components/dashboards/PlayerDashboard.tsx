@@ -27,6 +27,7 @@ interface PlayerDashboardProps {
   setSession: (s: Session) => void; // Funzione per aggiornare la sessione utente
 }
 
+// Componente PlayerDashboard
 export function PlayerDashboard({ session, dashboard, reloadData, setSession }: PlayerDashboardProps) {
     // Funzione per eliminare il profilo e reindirizzare
     const handleDeleteProfileAndRedirect = () => {
@@ -34,25 +35,26 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
         window.location.href = "/";
       });
     };
-  const bookings = useBookings();
-  const profile = useProfile();
-  const { isOpen, close } = useSidebar();
+  const bookings = useBookings(); // Importa l'hook useBookings
+  const profile = useProfile(); // Importa l'hook useProfile
+  const { isOpen, close } = useSidebar(); // Importa l'hook useSidebar
   
-  const [activeSection, setActiveSection] = useState<"Home" | "Impostazioni" | "Prenotazioni">("Home");
-  const [selectedField, setSelectedField] = useState<FieldItem | null>(null);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [activeSection, setActiveSection] = useState<"Home" | "Impostazioni" | "Prenotazioni">("Home"); // Stato per la sezione attiva
+  const [selectedField, setSelectedField] = useState<FieldItem | null>(null); // Stato per il campo selezionato
+  const [selectedDay, setSelectedDay] = useState<number | null>(null); // Stato per il giorno selezionato
 
+  // Aggiorna il nome del profilo quando la sessione cambia
   useEffect(() => {
     if (session) profile.setProfileName(session.name);
   }, [session]);
 
-  const playerBookings = useMemo(() => dashboard?.user?.player?.bookings ?? [], [dashboard]);
-  const nextBooking = useNextBooking(playerBookings);
-  const totalBookingsCount = useTotalBookingsCount(playerBookings);
-  const calendarDays = useCalendarDays(playerBookings);
-  const displayName = useMemo(() => session.name.split(" ")[0] || session.name, [session]);
+  const playerBookings = useMemo(() => dashboard?.user?.player?.bookings ?? [], [dashboard]); // Prenotazioni del giocatore
+  const nextBooking = useNextBooking(playerBookings); // Prossima prenotazione
+  const totalBookingsCount = useTotalBookingsCount(playerBookings); // Conteggio totale delle prenotazioni
+  const calendarDays = useCalendarDays(playerBookings); // Giorni del calendario
+  const displayName = useMemo(() => session.name.split(" ")[0] || session.name, [session]); // Nome da visualizzare
 
-  // Gestione Disponibilità per Modale Prenotazione
+  // Effetto per caricare la disponibilità di prenotazione quando cambiano i parametri
   useEffect(() => {
     if (!bookings.bookingField || !bookings.bookingDate) {
       bookings.loadAvailability(0, "", bookings.bookingDuration);
@@ -61,7 +63,7 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
     bookings.loadAvailability(bookings.bookingField.id, bookings.bookingDate, bookings.bookingDuration);
   }, [bookings.bookingField, bookings.bookingDate, bookings.bookingDuration]);
 
-  // Handlers
+  // Funzioni di conferma azioni
   const handleConfirmBooking = async () => {
     if (!bookings.bookingField) return;
     await bookings.confirmBooking(
@@ -70,6 +72,7 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
     );
   };
 
+  // Funzione di conferma modifica prenotazione
   const handleConfirmEditBooking = async () => {
     if (!bookings.editingBooking) return;
     await bookings.confirmEditBooking(
@@ -78,11 +81,13 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
     );
   };
 
+  // Funzione di conferma cancellazione prenotazione
   const handleConfirmCancelBooking = async () => {
     if (!bookings.cancelTarget) return;
     await bookings.confirmCancelBooking(session.id, bookings.cancelTarget.id, reloadData);
   };
 
+  // Funzione di conferma modifica profilo
   const handleProfileSave = async (e: React.FormEvent) => {
     e.preventDefault();
     await profile.handleProfileSave(
@@ -91,16 +96,17 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
     );
   };
 
+  // Renderizza il componente PlayerDashboard
   return (
     <div className={`grid gap-6 ${isOpen ? "lg:grid-cols-[240px_1fr]" : "lg:grid-cols-[1fr]"}`}>
       
       {/* Sidebar Mobile & Desktop */}
       <Sidebar
-        isOpen={isOpen}
-        onClose={close}
-        activeSection={activeSection}
-        onSectionChange={(section) => setActiveSection(section as any)}
-        sections={["Home", "Prenotazioni", "Impostazioni"]}
+        isOpen={isOpen} // Stato di apertura della sidebar
+        onClose={close} // Funzione per chiudere la sidebar
+        activeSection={activeSection} // Sezione attiva della dashboard
+        onSectionChange={(section) => setActiveSection(section as any)} // Funzione per cambiare la sezione attiva
+        sections={["Home", "Prenotazioni", "Impostazioni"]} 
       />
 
       <div className="space-y-6">
@@ -121,7 +127,7 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
               {/* 3. Available Fields List */}
               <PlayerFieldList 
                 fields={dashboard?.fields ?? []} 
-                onBook={bookings.openBooking}
+                onBook={bookings.openBooking} 
                 onInfo={(field) => { setSelectedField(field); setSelectedDay(null); }}
               />
             </div>
@@ -144,15 +150,15 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
 
         {activeSection === "Impostazioni" && (
           <ProfileSettingsForm
-            profileName={profile.profileName} setProfileName={profile.setProfileName}
+            profileName={profile.profileName} setProfileName={profile.setProfileName} 
             oldPassword={profile.oldPassword} setOldPassword={profile.setOldPassword}
             newPassword={profile.newPassword} setNewPassword={profile.setNewPassword}
             confirmPassword={profile.confirmPassword} setConfirmPassword={profile.setConfirmPassword}
-            showForm={profile.showProfileForm} setShowForm={profile.setShowProfileForm}
-            loading={profile.profileLoading} deleteLoading={profile.deleteProfileLoading}
-            error={profile.profileError} success={profile.profileSuccess}
-            onSave={handleProfileSave}
-            onDeleteRequest={() => profile.setDeleteProfileConfirmOpen(true)}
+            showForm={profile.showProfileForm} setShowForm={profile.setShowProfileForm} // Mostra/nascondi form
+            loading={profile.profileLoading} deleteLoading={profile.deleteProfileLoading} // Stati di caricamento
+            error={profile.profileError} success={profile.profileSuccess} // Messaggi di errore/successo
+            onSave={handleProfileSave} // Gestori di salvataggio
+            onDeleteRequest={() => profile.setDeleteProfileConfirmOpen(true)} // Gestore di richiesta eliminazione profilo
           />
         )}
       </div>
@@ -205,12 +211,12 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
 
       {/* Modali di Azione */}
       <BookingModal
-        field={bookings.bookingField} date={bookings.bookingDate} setDate={bookings.setBookingDate}
+        field={bookings.bookingField} date={bookings.bookingDate} setDate={bookings.setBookingDate} // Campo e data di prenotazione
         time={bookings.bookingTime} setTime={bookings.setBookingTime}
         duration={bookings.bookingDuration} setDuration={bookings.setBookingDuration}
         availableTimes={bookings.availableTimes} isLoading={bookings.bookingLoading}
         error={bookings.bookingError} success={bookings.bookingSuccess}
-        onClose={() => bookings.setBookingField(null)} onConfirm={handleConfirmBooking}
+        onClose={() => bookings.setBookingField(null)} onConfirm={handleConfirmBooking} // Funzione di conferma
       />
       <EditBookingModal
         booking={bookings.editingBooking} date={bookings.editDate} setDate={bookings.setEditDate}

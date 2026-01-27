@@ -4,6 +4,7 @@ import React from "react";
 import { FieldItem } from "@/lib/types";
 import { Button } from "../ui/Button";
 
+// Definisci le proprietà del componente DeleteFieldModal
 interface DeleteFieldModalProps {
   field: FieldItem | null;
   isLoading: boolean;
@@ -11,6 +12,7 @@ interface DeleteFieldModalProps {
   onConfirm: () => void;
 }
 
+// Componente DeleteFieldModal
 export function DeleteFieldModal({
   field,
   isLoading,

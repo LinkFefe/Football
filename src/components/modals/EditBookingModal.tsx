@@ -6,8 +6,9 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 
+// Definisci le proprietà del componente EditBookingModal
 interface EditBookingModalProps {
-    availableTimes?: string[];
+    availableTimes?: string[]; // Nuovo prop per gli orari disponibili
   booking: BookingItem | null;
   date: string;
   setDate: (date: string) => void;
@@ -21,6 +22,7 @@ interface EditBookingModalProps {
   onConfirm: () => void;
 }
 
+// Componente EditBookingModal
 export function EditBookingModal({
   booking,
   date,
@@ -37,7 +39,7 @@ export function EditBookingModal({
 }: EditBookingModalProps) {
   if (!booking) return null;
 
-  // Orari consentiti: dalle 08:00 alle 21:30
+  // Genera gli slot orari dalle 08:00 alle 21:30 in incrementi di 30 minuti
   const slots = [];
   for (let i = 0; i < 28; i++) {
     const hour = 8 + Math.floor(i / 2);
@@ -45,6 +47,7 @@ export function EditBookingModal({
     slots.push(`${String(hour).padStart(2, "0")}:${minute}`);
   }
 
+  // Renderizza il modal di modifica prenotazione
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6">
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0b0f14] p-6">
@@ -68,7 +71,7 @@ export function EditBookingModal({
             label="Giorno"
             type="date"
             value={date}
-            min={new Date().toISOString().slice(0, 10)}
+            min={new Date().toISOString().slice(0, 10)} // Imposta la data minima a oggi
             onChange={(e) => setDate(e.target.value)}
           />
 
@@ -77,27 +80,26 @@ export function EditBookingModal({
               Ora
             </label>
             <div className="grid grid-cols-4 gap-2">
-              {slots.map((slot) => {
-                // L'orario selezionato deve essere sempre "disponibile" anche se non lo è in availableTimes
-                const isCurrent = time === slot;
-                const isAvailable = isCurrent || availableTimes.length === 0 || availableTimes.includes(slot);
+              {slots.map((slot) => { // Mappa attraverso tutti gli slot orari
+                const isCurrent = time === slot; // Controlla se è l'orario attuale della prenotazione
+                const isAvailable = isCurrent || availableTimes.length === 0 || availableTimes.includes(slot); // Controlla se lo slot è disponibile
                 return (
                   <button
                     key={slot}
                     type="button"
-                    onClick={() => isAvailable && setTime(slot)}
+                    onClick={() => isAvailable && setTime(slot)} // Imposta l'orario solo se è disponibile
                     className={`rounded-lg px-2 py-2 text-xs font-semibold w-full text-center transition-all duration-100 border-2 ${
-                      isAvailable
-                        ? time === slot
+                      isAvailable // Controlla se lo slot è disponibile
+                        ? time === slot // Controlla se è l'orario selezionato
                           ? "bg-emerald-700 text-white border-emerald-900 shadow-md"
                           : "bg-emerald-400/80 text-[#0b0f14] border-transparent"
                         : "bg-gray-400/60 text-white/70 cursor-not-allowed border-transparent"
                     } ${
-                      isAvailable && time !== slot
+                      isAvailable && time !== slot // Aggiungi hover solo se lo slot è disponibile e non selezionato
                         ? "hover:bg-emerald-700 hover:text-white"
                         : ""
                     }`}
-                    disabled={isLoading || (!isAvailable && !isCurrent)}
+                    disabled={isLoading || (!isAvailable && !isCurrent)} // Disabilita il bottone se non è disponibile e non è l'orario attuale
                   >
                     {slot}
                   </button>

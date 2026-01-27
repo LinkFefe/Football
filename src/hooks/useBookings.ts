@@ -13,7 +13,7 @@ export function useBookings() {
 
   // Stati per orari disponibili (nuova prenotazione)
   const [availableTimes, setAvailableTimes] = useState<string[]>([]);
-  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+  const [availabilityLoading, setAvailabilityLoading] = useState(false); // Stato di caricamento per disponibilità
   // Stati per orari disponibili (modifica prenotazione)
   const [editAvailableTimes, setEditAvailableTimes] = useState<string[]>([]);
 
@@ -29,50 +29,53 @@ export function useBookings() {
   const [cancelTarget, setCancelTarget] = useState<BookingItem | null>(null);
   const [cancelLoading, setCancelLoading] = useState(false);
 
-  // Apre il modale di prenotazione
-  const openBooking = useCallback((field: FieldItem) => {
+  // Apre il modale di nuova prenotazione
+  const openBooking = useCallback((field: FieldItem) => { // Imposta il campo selezionato per la prenotazione
     setBookingField(field);
     setBookingDate("");
     setBookingTime("");
     setBookingDuration(1);
     setBookingError(null);
     setBookingSuccess(null);
-    setAvailableTimes([]);
+    setAvailableTimes([]); // Resetta gli orari disponibili
   }, []);
 
   // Carica la disponibilità di orari (nuova prenotazione)
   const loadAvailability = useCallback(async (fieldId: number, date: string, duration: number) => {
-    if (!date) {
-      setAvailableTimes([]);
-      return;
+    if (!date) { // Se non c'è una data
+      setAvailableTimes([]); // Resetta gli orari disponibili
+      return; 
     }
 
+    // Inizia il caricamento della disponibilità
     setAvailabilityLoading(true);
     try {
-      const response = await fetch(`/api/bookings?fieldId=${fieldId}&date=${date}`, {
-        cache: "no-store",
+      const response = await fetch(`/api/bookings?fieldId=${fieldId}&date=${date}`, { // Richiesta API per ottenere le prenotazioni del campo in una data specifica
+        cache: "no-store", // Disabilita la cache
       });
-      const data = (await response.json()) as {
-        bookings?: Array<{ startDate: string; endDate: string }>;
+      const data = (await response.json()) as { // Estrai i dati della risposta
+        bookings?: Array<{ startDate: string; endDate: string }>; // Prenotazioni esistenti
       };
-      const booked = (data.bookings ?? []).map((item) => ({
+      const booked = (data.bookings ?? []).map((item) => ({ // Mappa le prenotazioni esistenti in oggetti con date di inizio e fine
         start: new Date(item.startDate),
         end: new Date(item.endDate),
       }));
 
+      // Genera gli slot orari disponibili
       const slots = Array.from({ length: 28 }).flatMap((_, i) => {
         const hour = 8 + Math.floor(i / 2);
         const minute = i % 2 === 0 ? "00" : "30";
         return `${String(hour).padStart(2, "0")}:${minute}`;
       });
 
+      // Filtra gli orari disponibili escludendo quelli già prenotati
       const available = slots.filter((time) => {
-        const start = new Date(`${date}T${time}:00`);
+        const start = new Date(`${date}T${time}:00`); //
         const end = new Date(start.getTime() + duration * 60 * 60 * 1000);
-        return !booked.some((item) => start < item.end && end > item.start);
+        return !booked.some((item) => start < item.end && end > item.start); // Verifica conflitti con prenotazioni esistenti
       });
 
-      setAvailableTimes(available);
+      setAvailableTimes(available); // Imposta gli orari disponibili
     } finally {
       setAvailabilityLoading(false);
     }
@@ -81,37 +84,39 @@ export function useBookings() {
   // Carica la disponibilità di orari (modifica prenotazione)
   const loadEditAvailability = useCallback(async (fieldId: number, date: string, duration: number, bookingId: number) => {
     if (!date) {
-      setEditAvailableTimes([]);
+      setEditAvailableTimes([]); // Resetta gli orari disponibili per la modifica
       return;
     }
 
     setAvailabilityLoading(true);
     try {
-      const response = await fetch(`/api/bookings?fieldId=${fieldId}&date=${date}&excludeBookingId=${bookingId}`, {
+      const response = await fetch(`/api/bookings?fieldId=${fieldId}&date=${date}&excludeBookingId=${bookingId}`, { // Esclude la prenotazione in modifica
         cache: "no-store",
       });
       const data = (await response.json()) as {
         bookings?: Array<{ startDate: string; endDate: string, id?: number }>;
       };
-      const booked = (data.bookings ?? []).map((item) => ({
+      const booked = (data.bookings ?? []).map((item) => ({ // Mappa le prenotazioni esistenti
         start: new Date(item.startDate),
         end: new Date(item.endDate),
         id: item.id
       }));
 
+      // Genera gli slot orari disponibili
       const slots = Array.from({ length: 28 }).flatMap((_, i) => {
         const hour = 8 + Math.floor(i / 2);
         const minute = i % 2 === 0 ? "00" : "30";
         return `${String(hour).padStart(2, "0")}:${minute}`;
       });
 
+      // Filtra gli orari disponibili escludendo quelli già prenotati
       const available = slots.filter((time) => {
         const start = new Date(`${date}T${time}:00`);
         const end = new Date(start.getTime() + duration * 60 * 60 * 1000);
         return !booked.some((item) => start < item.end && end > item.start);
       });
 
-      setEditAvailableTimes(available);
+      setEditAvailableTimes(available); // Imposta gli orari disponibili per la modifica
     } finally {
       setAvailabilityLoading(false);
     }
@@ -121,14 +126,14 @@ export function useBookings() {
   const confirmBooking = useCallback(
     async (userId: number, fieldId: number, date: string, time: string, durationHours: number, onSuccess: () => void) => {
       setBookingLoading(true);
-      setBookingError(null);
-      setBookingSuccess(null);
+      setBookingError(null); // Resetta errori precedenti
+      setBookingSuccess(null); // Resetta messaggi precedenti
 
       try {
         const response = await fetch("/api/bookings", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+          method: "POST", // Metodo POST per creare una nuova prenotazione
+          headers: { "Content-Type": "application/json" }, // Intestazioni della richiesta
+          body: JSON.stringify({ // Corpo della richiesta con i dati della prenotazione
             userId,
             fieldId,
             date,
@@ -144,11 +149,11 @@ export function useBookings() {
         }
 
         setBookingSuccess("Prenotazione confermata!");
-        setBookingField(null);
-        setBookingDate("");
+        setBookingField(null); // Chiude il modale di prenotazione
+        setBookingDate(""); // Resetta la data
         setBookingTime("");
         setBookingDuration(1);
-        onSuccess();
+        onSuccess(); // Callback di successo
         return true;
       } finally {
         setBookingLoading(false);
@@ -160,15 +165,15 @@ export function useBookings() {
   // Apre il modale di modifica prenotazione
   const openEditBooking = useCallback((booking: BookingItem) => {
     setEditingBooking(booking);
-    const start = new Date(booking.startDate);
-    setEditDate(start.toISOString().slice(0, 10));
-    setEditTime(start.toTimeString().slice(0, 5));
-    const hours = (new Date(booking.endDate).getTime() - start.getTime()) / (60 * 60 * 1000);
-    setEditDuration(hours === 1.5 ? 1.5 : 1);
-    setEditError(null);
+    const start = new Date(booking.startDate); // Estrai la data di inizio della prenotazione
+    setEditDate(start.toISOString().slice(0, 10)); // Imposta la data di modifica
+    setEditTime(start.toTimeString().slice(0, 5)); // Imposta l'orario di modifica
+    const hours = (new Date(booking.endDate).getTime() - start.getTime()) / (60 * 60 * 1000); // Calcola la durata in ore
+    setEditDuration(hours === 1.5 ? 1.5 : 1); // Imposta la durata di modifica
+    setEditError(null); // Resetta errori precedenti
     // Carica la disponibilità per la modifica
     if (booking.field && booking.field.id) {
-      loadEditAvailability(booking.field.id, start.toISOString().slice(0, 10), hours === 1.5 ? 1.5 : 1, booking.id);
+      loadEditAvailability(booking.field.id, start.toISOString().slice(0, 10), hours === 1.5 ? 1.5 : 1, booking.id); // Carica orari disponibili per la modifica
     }
   }, [loadEditAvailability]);
 
@@ -180,7 +185,7 @@ export function useBookings() {
 
       try {
         const response = await fetch("/api/bookings", {
-          method: "PATCH",
+          method: "PATCH", // Metodo PATCH per modificare una prenotazione esistente
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId,
@@ -209,7 +214,7 @@ export function useBookings() {
 
   // Richiede la cancellazione di una prenotazione
   const requestCancelBooking = useCallback((booking: BookingItem) => {
-    setCancelTarget(booking);
+    setCancelTarget(booking); // Imposta la prenotazione da cancellare
   }, []);
 
   // Conferma la cancellazione della prenotazione
@@ -219,14 +224,14 @@ export function useBookings() {
 
       try {
         const response = await fetch("/api/bookings", {
-          method: "DELETE",
+          method: "DELETE", // Metodo DELETE per cancellare una prenotazione
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ userId, bookingId }),
         });
 
         if (response.ok) {
           setCancelTarget(null);
-          onSuccess();
+          onSuccess(); // Callback di successo
           return true;
         }
         return false;

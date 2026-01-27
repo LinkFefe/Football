@@ -1,16 +1,18 @@
-"use client";
+"use client"; // Indica che questo componente deve essere renderizzato sul client
 
-import React from "react";
+import React from "react"; // Importa React
 
+// Definisci le proprietà del componente Modal
 interface ModalProps {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen: boolean; // Stato di apertura della modale
+  onClose: () => void; // Funzione per chiudere la modale
   title?: string;
-  children: React.ReactNode;
-  footer?: React.ReactNode;
-  size?: "sm" | "md" | "lg";
+  children: React.ReactNode; // Contenuto della modale
+  footer?: React.ReactNode; // Contenuto del footer della modale
+  size?: "sm" | "md" | "lg"; 
 }
 
+// Componente Modal
 export function Modal({
   isOpen,
   onClose,
@@ -27,6 +29,7 @@ export function Modal({
     lg: "max-w-lg",
   };
 
+  // Ritorna la modale con backdrop, header, contenuto e footer
   return (
     <>
       {/* Backdrop */}
@@ -40,7 +43,7 @@ export function Modal({
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
         <div
           className={`relative w-full ${sizeStyles[size]} rounded-3xl border border-white/10 bg-[#0b0f14] overflow-auto max-h-[90vh]`}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => e.stopPropagation()} // Previene la chiusura quando si clicca all'interno della modale
         >
           {/* Header */}
           {title && (
@@ -58,7 +61,7 @@ export function Modal({
           )}
 
           {/* Content */}
-          <div className="px-6 py-4">{children}</div>
+          <div className="px-6 py-4">{children}</div> 
 
           {/* Footer */}
           {footer && (

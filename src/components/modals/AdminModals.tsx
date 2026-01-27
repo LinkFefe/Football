@@ -1,16 +1,18 @@
-"use client";
+"use client"; // Abilita il rendering lato client
 
 import React from "react";
 import { UserItem, AdminBookingItem } from "@/lib/types";
 import { Button } from "../ui/Button";
 
+// Definisci le proprietà del componente AdminDeleteUserModal
 interface AdminDeleteUserModalProps {
-  user: UserItem | null;
+  user: UserItem | null; // Utente da eliminare
   isLoading: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
+  onClose: () => void; 
+  onConfirm: () => void; 
 }
 
+// Componente AdminDeleteUserModal
 export function AdminDeleteUserModal({
   user,
   isLoading,
@@ -55,8 +57,8 @@ export function AdminDeleteUserModal({
             size="md"
             className="rounded-full"
             onClick={onConfirm}
-            disabled={isLoading}
-            isLoading={isLoading}
+            disabled={isLoading} // Disabilita il pulsante se è in caricamento
+            isLoading={isLoading} // Mostra lo stato di caricamento
           >
             Elimina utente
           </Button>
@@ -66,6 +68,7 @@ export function AdminDeleteUserModal({
   );
 }
 
+// Definisci le proprietà del componente AdminDeleteBookingModal
 interface AdminDeleteBookingModalProps {
   booking: AdminBookingItem | null;
   isLoading: boolean;
@@ -73,6 +76,7 @@ interface AdminDeleteBookingModalProps {
   onConfirm: () => void;
 }
 
+// Componente AdminDeleteBookingModal
 export function AdminDeleteBookingModal({
   booking,
   isLoading,
@@ -122,7 +126,7 @@ export function AdminDeleteBookingModal({
             className="rounded-full"
             onClick={onConfirm}
             disabled={isLoading}
-            isLoading={isLoading}
+            isLoading={isLoading} // Mostra lo stato di caricamento
           >
             Elimina prenotazione
           </Button>

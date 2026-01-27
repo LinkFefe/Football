@@ -1,14 +1,17 @@
 import { useState, useCallback } from "react";
 import { FieldItem } from "@/lib/types";
 
+// Hook personalizzato per la gestione dei campi
 export function useFields() {
   // Stati per modifica campo
-  const [editingField, setEditingField] = useState<FieldItem | null>(null);
+  const [editingField, setEditingField] = useState<FieldItem | null>(null); // Campo attualmente in modifica
   const [fieldName, setFieldName] = useState("");
   const [fieldSize, setFieldSize] = useState("");
   const [fieldLocation, setFieldLocation] = useState("");
   const [fieldError, setFieldError] = useState<string | null>(null);
   const [fieldLoading, setFieldLoading] = useState(false);
+  // Stato per l'immagine nella modifica campo
+  const [fieldImageUrl, setFieldImageUrl] = useState("");
 
   // Stati per eliminazione campo
   const [deleteFieldTarget, setDeleteFieldTarget] = useState<FieldItem | null>(null);
@@ -29,12 +32,21 @@ export function useFields() {
     setFieldName(field.name);
     setFieldSize(field.size);
     setFieldLocation(field.location ?? "");
+    setFieldImageUrl(field.imageUrl ?? "");
     setFieldError(null);
   }, []);
 
   // Conferma la modifica del campo
   const confirmEditField = useCallback(
-    async (userId: number, fieldId: number, name: string, size: string, location: string | null, onSuccess: () => void) => {
+    async (
+      userId: number,
+      fieldId: number,
+      name: string,
+      size: string,
+      location: string | null,
+      imageUrl: string | null,
+      onSuccess: () => void
+    ) => {
       setFieldLoading(true);
       setFieldError(null);
 
@@ -48,6 +60,7 @@ export function useFields() {
             name: name.trim() || undefined,
             size: size.trim() || undefined,
             location: location?.trim() || null,
+            imageUrl: imageUrl?.trim() || null,
           }),
         });
 
@@ -58,6 +71,7 @@ export function useFields() {
         }
 
         setEditingField(null);
+        setFieldImageUrl("");
         onSuccess();
         return true;
       } finally {
@@ -83,7 +97,7 @@ export function useFields() {
           method: "DELETE",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(
-            isAdmin && adminId ? { adminId, fieldId } : { userId, fieldId }
+            isAdmin && adminId ? { adminId, fieldId } : { userId, fieldId } // Corpo della richiesta differente per admin o utente normale
           ),
         });
 
@@ -94,7 +108,7 @@ export function useFields() {
         }
 
         setDeleteFieldTarget(null);
-        onSuccess();
+        onSuccess(); // Callback di successo
         return true;
       } finally {
         setDeleteFieldLoading(false);
@@ -163,6 +177,8 @@ export function useFields() {
     fieldLoading,
     openEditField,
     confirmEditField,
+    fieldImageUrl,
+    setFieldImageUrl,
 
     // Eliminazione campo
     deleteFieldTarget,

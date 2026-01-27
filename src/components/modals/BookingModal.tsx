@@ -1,11 +1,12 @@
-"use client";
+"use client"; // Rendering lato client
 
-import React from "react";
+import React from "react"; 
 import { FieldItem } from "@/lib/types";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 import { Select } from "../ui/Select";
 
+// Definisci le proprietà del componente BookingModal
 interface BookingModalProps {
   field: FieldItem | null;
   date: string;
@@ -14,14 +15,15 @@ interface BookingModalProps {
   setTime: (time: string) => void;
   duration: number;
   setDuration: (duration: number) => void;
-  availableTimes: string[];
+  availableTimes: string[]; // Orari disponibili per la data selezionata
   isLoading: boolean;
   error: string | null;
   success: string | null;
-  onClose: () => void;
-  onConfirm: () => void;
+  onClose: () => void; // Funzione per chiudere il modal
+  onConfirm: () => void; // Funzione per confermare la prenotazione
 }
 
+// Componente BookingModal
 export function BookingModal({
   field,
   date,
@@ -39,14 +41,15 @@ export function BookingModal({
 }: BookingModalProps) {
   if (!field) return null;
 
-  // Slot da 08:00 a 21:30, intervalli di mezz'ora
+  // Genera gli slot orari dalle 08:00 alle 21:30
   const slots = [];
   for (let i = 0; i < 28; i++) {
     const hour = 8 + Math.floor(i / 2);
     const minute = i % 2 === 0 ? "00" : "30";
-    slots.push(`${String(hour).padStart(2, "0")}:${minute}`);
+    slots.push(`${String(hour).padStart(2, "0")}:${minute}`); // Formatta come "HH:MM"
   }
 
+  // Renderizza il modal di prenotazione
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-6">
       <div className="w-full max-w-md rounded-3xl border border-white/10 bg-[#0b0f14] p-6">
@@ -70,8 +73,8 @@ export function BookingModal({
             label="Giorno"
             type="date"
             value={date}
-            min={new Date().toISOString().slice(0, 10)}
-            onChange={(e) => setDate(e.target.value)}
+            min={new Date().toISOString().slice(0, 10)} // Imposta la data minima a oggi
+            onChange={(e) => setDate(e.target.value)} // Aggiorna la data selezionata
           />
 
           <div className="space-y-2">
@@ -80,24 +83,24 @@ export function BookingModal({
             </label>
             <div className="grid grid-cols-4 gap-2">
               {slots.map((slot) => {
-                const isAvailable = availableTimes.includes(slot);
+                const isAvailable = availableTimes.includes(slot); // Verifica se lo slot è disponibile
                 return (
                   <button
                     key={slot}
                     type="button"
-                    onClick={() => isAvailable && setTime(slot)}
+                    onClick={() => isAvailable && setTime(slot)} // Imposta l'ora se disponibile
                     className={`rounded-lg px-2 py-2 text-xs font-semibold w-full text-center transition-all duration-100 border-2 ${
-                      isAvailable
-                        ? time === slot
+                      isAvailable // Stile in base alla disponibilità
+                        ? time === slot // Stile se selezionato
                           ? "bg-emerald-700 text-white border-emerald-900 shadow-md"
                           : "bg-emerald-400/80 text-[#0b0f14] border-transparent"
                         : "bg-gray-400/60 text-white/70 cursor-not-allowed border-transparent"
                     } ${
-                      isAvailable && time !== slot
+                      isAvailable && time !== slot // Aggiungi hover solo se disponibile e non selezionato
                         ? "hover:bg-emerald-700 hover:text-white"
                         : ""
                     }`}
-                    disabled={isLoading || !isAvailable}
+                    disabled={isLoading || !isAvailable} // Disabilita se in caricamento o non disponibile
                   >
                     {slot}
                   </button>
@@ -119,7 +122,7 @@ export function BookingModal({
           <Select
             label="Durata"
             value={duration}
-            onChange={(e) => setDuration(Number(e.target.value))}
+            onChange={(e) => setDuration(Number(e.target.value))} // Aggiorna la durata selezionata
             options={[
               { value: 1, label: "1h" },
               { value: 1.5, label: "1h 30min" },
@@ -128,7 +131,7 @@ export function BookingModal({
 
           {error && (
             <div className="rounded-xl border border-red-500/40 bg-red-500/10 px-4 py-3 text-sm text-red-200">
-              {error}
+              {error} 
             </div>
           )}
 

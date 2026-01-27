@@ -1,14 +1,16 @@
 "use client";
 
-import React from "react";
+import React from "react"; 
 
+// Definisci le proprietà del componente Select
 interface SelectProps
-  extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  extends React.SelectHTMLAttributes<HTMLSelectElement> { // Estendi le proprietà standard di un elemento select
   label?: string;
   error?: string | null;
-  options: Array<{ value: string | number; label: string }>;
+  options: Array<{ value: string | number; label: string }>; // Opzioni per il select
 }
 
+// Componente Select
 export function Select({
   label,
   error,
@@ -17,20 +19,21 @@ export function Select({
   className = "",
   ...props
 }: SelectProps) {
-  const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
+  const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`; // Genera un ID unico se non fornito
 
+  // Ritorna il select con etichetta e messaggi di errore
   return (
     <div className="space-y-1.5">
       {label && (
         <label
-          htmlFor={selectId}
+          htmlFor={selectId} // Associa l'etichetta al select tramite l'ID
           className="block text-sm font-medium text-white/80"
         >
           {label}
         </label>
       )}
       <select
-        id={selectId}
+        id={selectId} // Usa l'ID generato o fornito
         className={`w-full rounded-xl border px-4 py-2.5 outline-none transition-all duration-200
           ${
             error
@@ -44,7 +47,7 @@ export function Select({
         </option>
 
         {/* Le altre opzioni */}
-        {options.map((option) => (
+        {options.map((option) => ( // Mappa le opzioni passate come prop
           <option key={option.value} value={option.value} className="bg-gray-900 text-white">
             {option.label}
           </option>

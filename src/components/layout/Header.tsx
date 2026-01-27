@@ -1,14 +1,16 @@
-"use client";
+"use client"; // Abilita il rendering lato client
 
-import React from "react";
-import { Button } from "../ui/Button";
+import React from "react"; // Importa React
+import { Button } from "../ui/Button"; // Importa il componente Button
 
+// Definisci le proprietà del componente Header
 interface HeaderProps {
-  onMenuToggle: () => void;
-  onLogout: () => void;
-  userName: string;
+  onMenuToggle: () => void; // Funzione per togglare il menu
+  onLogout: () => void; // Funzione di logout
+  userName: string; // Nome utente da mostrare
 }
 
+// Componente Header
 export function Header({ onMenuToggle, onLogout, userName }: HeaderProps) {
   return (
     <div className="flex items-center justify-between gap-3">

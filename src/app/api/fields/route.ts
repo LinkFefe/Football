@@ -1,3 +1,30 @@
+// Restituisce tutti i campi con info proprietario anche per utenti normali
+export async function GET() {
+  try {
+    const fields = await prisma.field.findMany({
+      include: {
+        owner: {
+          include: {
+            user: true
+          }
+        }
+      }
+    });
+    // Mappa i dati per includere ownerName e ownerEmail
+    const result = fields.map(field => ({
+      id: field.id,
+      name: field.name,
+      size: field.size,
+      location: field.location,
+      imageUrl: field.imageUrl,
+      ownerName: field.owner?.user?.name ?? null,
+      ownerEmail: field.owner?.user?.email ?? null,
+    }));
+    return NextResponse.json(result);
+  } catch (error) {
+    return NextResponse.json({ message: "Errore del server." }, { status: 500 });
+  }
+}
 import { NextResponse } from "next/server"; // Importa NextResponse per creare risposte API
 import { prisma } from "@/lib/db"; // Importa l'istanza di Prisma per interagire con il database
 
@@ -52,12 +79,13 @@ export async function POST(request: Request) {
 export async function PATCH(request: Request) {
   try {
     const body = await request.json(); 
-    const { userId, fieldId, name, size, location } = body as { 
+    const { userId, fieldId, name, size, location, imageUrl } = body as { 
       userId?: number; 
       fieldId?: number; 
       name?: string;
       size?: string;
       location?: string | null;
+      imageUrl?: string | null;
     };
 
     // Verifica che tutti i dati necessari siano presenti
@@ -90,6 +118,7 @@ export async function PATCH(request: Request) {
         name: name.trim(),
         size: size.trim(),
         location: location?.trim() || null,
+        imageUrl: imageUrl?.trim() || null,
       },
     });
 

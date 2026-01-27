@@ -38,9 +38,18 @@ export async function GET(request: Request) {
         },
       });
 
-      // Recupera tutti i campi disponibili
-      const fields = await prisma.field.findMany({ orderBy: { id: "asc" } });
-
+      // Recupera tutti i campi disponibili con info proprietario
+      const fieldsRaw = await prisma.field.findMany({ include: { owner: { include: { user: true } } }, orderBy: { id: "asc" } });
+      // Mappa i campi per includere il nome e l'email del proprietario
+      const fields = fieldsRaw.map(f => ({
+        id: f.id,
+        name: f.name,
+        size: f.size,
+        location: f.location,
+        imageUrl: f.imageUrl,
+        ownerName: f.owner?.user?.name ?? "N/A",
+        ownerEmail: f.owner?.user?.email ?? "N/A"
+      }));
       // Ritorna i dati del giocatore e i campi
       return NextResponse.json({ user, fields });
     }
