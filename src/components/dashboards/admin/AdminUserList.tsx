@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import { UserItem, Role } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import React, { useState } from "react"; // Importa React e useState
+import { UserItem, Role } from "@/lib/types"; // Importa i tipi UserItem e Role
+import { Button } from "@/components/ui/Button"; // Importa il componente Button
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente AdminUserList
 interface AdminUserListProps {
   users: UserItem[];
-  onDeleteUser: (user: UserItem) => void;
+  onDeleteUser: (user: UserItem) => void; 
 }
 
+// Mappa dei ruoli agli etichette leggibili
 const roleLabels: Record<Role, string> = {
   PLAYER: "Giocatore",
   OWNER: "Proprietario",
   ADMIN: "Amministratore",
 };
 
+// Componente AdminUserList
 export function AdminUserList({ users, onDeleteUser }: AdminUserListProps) {
-  const [expanded, setExpanded] = useState(false);
+  const [expanded, setExpanded] = useState(false); // Stato per espandere o ridurre la lista degli utenti
   const VISIBLE_COUNT = 7;
   const visibleUsers = expanded ? users : users.slice(0, VISIBLE_COUNT);
   return (
@@ -43,7 +46,7 @@ export function AdminUserList({ users, onDeleteUser }: AdminUserListProps) {
             </Button>
           </div>
         ))}
-        {users.length === 0 && <p className="text-white/40 italic">Nessun utente registrato.</p>}
+        {users.length === 0 && <p className="text-white/40 italic">Nessun utente registrato</p>}
         {users.length > VISIBLE_COUNT && (
           <Button
             variant="secondary"

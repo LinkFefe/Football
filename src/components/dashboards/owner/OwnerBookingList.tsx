@@ -1,16 +1,16 @@
-import { BookingItem } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { BookingItem } from "@/lib/types"; // Importa il tipo BookingItem
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
-// Estendiamo il tipo BookingItem per includere i dati del giocatore, se necessario
-// (in base a come è definito nel tuo types.ts, potrebbe già esserci)
+// Definisci le proprietà del componente OwnerBookingList
 interface OwnerBookingListProps {
-  bookings: any[]; // Usa il tipo corretto importato, qui metto any per sicurezza ma usa il tipo reale
+  bookings: any[]; // Array di prenotazioni
 }
 
+// Componente OwnerBookingList
 export function OwnerBookingList({ bookings }: OwnerBookingListProps) {
   return (
     <Card>
-      <h3 className="text-lg font-semibold">Prenotazioni campi</h3>
+      <h3 className="text-lg font-semibold">Elenco prenotazioni</h3>
       <div className="mt-4 space-y-3">
         {bookings.map((b) => (
           <div
@@ -34,7 +34,7 @@ export function OwnerBookingList({ bookings }: OwnerBookingListProps) {
           </div>
         ))}
         {bookings.length === 0 && (
-          <p className="text-white/40">Nessuna prenotazione attiva.</p>
+          <p className="text-white/40">Nessuna prenotazione attiva</p>
         )}
       </div>
     </Card>

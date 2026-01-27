@@ -1,10 +1,12 @@
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente OwnerStatsCard
 interface OwnerStatsCardProps {
   displayName: string;
   bookingsCount: number;
 }
 
+// Componente OwnerStatsCard
 export function OwnerStatsCard({ displayName, bookingsCount }: OwnerStatsCardProps) {
   return (
     <Card variant="gradient" className="flex flex-wrap items-center justify-between gap-4">

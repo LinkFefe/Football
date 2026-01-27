@@ -1,25 +1,28 @@
-import { useState } from "react";
-import { FieldItem } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { useState } from "react"; // Importa useState da React
+import { FieldItem } from "@/lib/types"; // Importa il tipo FieldItem
+import { Button } from "@/components/ui/Button"; // Importa il componente Button
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente PlayerFieldList
 interface PlayerFieldListProps {
-  fields: FieldItem[];
-  onBook: (field: FieldItem) => void;
-  onInfo: (field: FieldItem) => void;
+  fields: FieldItem[]; // Array di campi disponibili
+  onBook: (field: FieldItem) => void; // Funzione di callback per la prenotazione
+  onInfo: (field: FieldItem) => void; // Funzione di callback per le informazioni
 }
 
+// Campi di fallback se non ne vengono forniti
 const fallbackFields: FieldItem[] = [
   { id: 1, name: "Central Park Field 1", size: "5v5", location: "Centro città", imageUrl: "/images/field-1.svg" },
   { id: 2, name: "River Side Field 2", size: "7v7", location: "Zona Nord", imageUrl: "/images/field-2.svg" },
   { id: 3, name: "Arena Field 3", size: "9v9", location: "Zona Sud", imageUrl: "/images/field-3.svg" },
 ];
 
+// Componente PlayerFieldList
 export function PlayerFieldList({ fields, onBook, onInfo }: PlayerFieldListProps) {
-  const [showAllFields, setShowAllFields] = useState(false);
+  const [showAllFields, setShowAllFields] = useState(false); // Stato per mostrare tutti i campi o solo alcuni
   
-  const displayFields = fields.length > 0 ? fields : fallbackFields;
-  const visibleFields = showAllFields ? displayFields : displayFields.slice(0, 6);
+  const displayFields = fields.length > 0 ? fields : fallbackFields; // Usa i campi forniti o quelli di fallback
+  const visibleFields = showAllFields ? displayFields : displayFields.slice(0, 6); // Mostra tutti i campi o solo i primi 6
 
   return (
     <Card>

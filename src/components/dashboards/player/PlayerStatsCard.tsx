@@ -1,10 +1,12 @@
-import { Card } from "@/components/ui/Card";
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente PlayerStatsCard
 interface PlayerStatsCardProps {
-  displayName: string;
-  totalBookingsCount: number;
+  displayName: string; // Nome visualizzato del giocatore
+  totalBookingsCount: number; // Numero totale di prenotazioni del giocatore
 }
 
+// Componente PlayerStatsCard
 export function PlayerStatsCard({ displayName, totalBookingsCount }: PlayerStatsCardProps) {
   return (
     <Card variant="gradient" className="flex flex-col justify-between gap-6 md:flex-row md:items-center">

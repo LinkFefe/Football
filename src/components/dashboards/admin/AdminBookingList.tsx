@@ -1,17 +1,19 @@
 
-import { useState } from "react";
-import { AdminBookingItem } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { useState } from "react"; // Importa useState da React
+import { AdminBookingItem } from "@/lib/types"; // Importa il tipo AdminBookingItem
+import { Button } from "@/components/ui/Button"; // Importa il componente Button
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente AdminBookingList
 interface AdminBookingListProps {
-  bookings: AdminBookingItem[];
-  onDeleteBooking: (booking: AdminBookingItem) => void;
+  bookings: AdminBookingItem[]; // Array di prenotazioni
+  onDeleteBooking: (booking: AdminBookingItem) => void; // Funzione di callback per eliminare una prenotazione
 }
 
+// Componente AdminBookingList
 export function AdminBookingList({ bookings, onDeleteBooking }: AdminBookingListProps) {
-  const [expanded, setExpanded] = useState(false);
-  const visibleBookings = expanded ? bookings : (bookings || []).slice(0, 5);
+  const [expanded, setExpanded] = useState(false); // Stato per espandere o ridurre la lista delle prenotazioni
+  const visibleBookings = expanded ? bookings : (bookings || []).slice(0, 5); // Mostra tutte le prenotazioni o solo le prime 5
   return (
     <Card>
       <h4 className="text-sm font-semibold text-emerald-200">Prenotazioni</h4>

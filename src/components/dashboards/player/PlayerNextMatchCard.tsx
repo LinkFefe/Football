@@ -1,14 +1,16 @@
-import { BookingItem } from "@/lib/types";
-import { Card } from "@/components/ui/Card";
+import { BookingItem } from "@/lib/types"; // Importa il tipo BookingItem
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente PlayerNextMatchCard
 interface PlayerNextMatchCardProps {
-  nextBooking: BookingItem | null;
+  nextBooking: BookingItem | null; // La prossima prenotazione del giocatore o null se non esiste
 }
 
+// Componente PlayerNextMatchCard
 export function PlayerNextMatchCard({ nextBooking }: PlayerNextMatchCardProps) {
-  const formatMatchDate = (value: string) => new Date(value).toLocaleDateString();
+  const formatMatchDate = (value: string) => new Date(value).toLocaleDateString(); // Funzione per formattare la data della partita
   const formatMatchTime = (value: string) =>
-    new Date(value).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+    new Date(value).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); // Funzione per formattare l'orario della partita
 
   return (
     <Card variant="featured">
@@ -47,7 +49,7 @@ export function PlayerNextMatchCard({ nextBooking }: PlayerNextMatchCardProps) {
           </div>
         </div>
       ) : (
-        <p className="mt-4 text-sm text-white/60">Nessuna prenotazione attiva.</p>
+        <p className="mt-4 text-sm text-white/60">Nessuna prenotazione attiva</p>
       )}
     </Card>
   );

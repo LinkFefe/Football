@@ -6,7 +6,7 @@ import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
 
 interface FieldModalProps {
-  field: FieldItem | null;
+  field: FieldItem | null; 
   fieldName: string;
   setFieldName: (name: string) => void;
   fieldSize: string;

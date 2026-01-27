@@ -1,14 +1,16 @@
-import { FieldItem } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { FieldItem } from "@/lib/types"; // Importa il tipo FieldItem
+import { Button } from "@/components/ui/Button"; // Importa il componente Button
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente OwnerFieldManagementList
 interface OwnerFieldManagementListProps {
-  fields: FieldItem[];
-  onCreateClick: () => void;
-  onEditClick: (field: FieldItem) => void;
-  onDeleteClick: (field: FieldItem) => void;
+  fields: FieldItem[]; // Array di campi gestiti dal proprietario
+  onCreateClick: () => void; // Funzione di callback per la creazione di un nuovo campo
+  onEditClick: (field: FieldItem) => void; // Funzione di callback per la modifica di un campo
+  onDeleteClick: (field: FieldItem) => void; // Funzione di callback per l'eliminazione di un campo
 }
 
+// Componente OwnerFieldManagementList
 export function OwnerFieldManagementList({ 
   fields, 
   onCreateClick, 

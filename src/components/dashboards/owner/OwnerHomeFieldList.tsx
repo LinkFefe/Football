@@ -1,16 +1,18 @@
-import { FieldItem, BookingItem, UserItem } from "@/lib/types"; // Assicurati che i tipi siano corretti nel tuo progetto
-import { Button } from "@/components/ui/Button";
+import { FieldItem, BookingItem, UserItem } from "@/lib/types";  // Importa i tipi necessari
+import { Button } from "@/components/ui/Button"; // Importa il componente Button
 
-// Definiamo un tipo specifico per i campi dell'owner che includono le prenotazioni
+// Estendiamo il tipo FieldItem per includere le prenotazioni associate
 interface OwnerFieldItem extends FieldItem {
-  bookings: (BookingItem & { player: { user: UserItem } })[];
+  bookings: (BookingItem & { player: { user: UserItem } })[]; // Prenotazioni con informazioni sul giocatore e sull'utente
 }
 
+// Definisci le proprietà del componente OwnerHomeFieldList
 interface OwnerHomeFieldListProps {
-  fields: OwnerFieldItem[];
-  onInfoClick: (field: FieldItem) => void;
+  fields: OwnerFieldItem[]; // Array di campi con le loro prenotazioni
+  onInfoClick: (field: FieldItem) => void; // Funzione di callback per le informazioni sul campo
 }
 
+// Componente OwnerHomeFieldList
 export function OwnerHomeFieldList({ fields, onInfoClick }: OwnerHomeFieldListProps) {
   return (
     <div className="grid gap-6 md:grid-cols-2">
@@ -28,7 +30,7 @@ export function OwnerHomeFieldList({ fields, onInfoClick }: OwnerHomeFieldListPr
                 variant="secondary"
                 className="rounded-full border-none bg-blue-500/20 text-[10px] font-semibold text-blue-200 hover:bg-blue-500/30 px-3 py-1 min-w-0 min-h-0"
                 style={{lineHeight: '1.1'}} // per renderlo più compatto
-                onClick={() => onInfoClick(field)}
+                onClick={() => onInfoClick(field)} 
               >
                 Info
               </Button>
@@ -49,7 +51,7 @@ export function OwnerHomeFieldList({ fields, onInfoClick }: OwnerHomeFieldListPr
                 </div>
               ))}
               {field.bookings.length === 0 && (
-                <p className="italic text-white/40">Nessuna prenotazione.</p>
+                <p className="italic text-white/40">Nessuna prenotazione</p>
               )}
             </div>
           </div>

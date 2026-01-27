@@ -1,50 +1,55 @@
-import { Card } from "@/components/ui/Card";
-import { useState } from "react";
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
+import { useState } from "react"; // Importa useState da React
 
+// Definisci il tipo per i giorni del calendario
 interface CalendarDay {
-  day: number;
-  hasBooking: boolean;
+  day: number; // Numero del giorno
+  hasBooking: boolean; // Indica se il giorno ha una prenotazione
 }
 
+// Definisci il tipo per le proprietà del componente PlayerCalendarCard
 interface PlayerCalendarCardProps {
-  bookings: any[];
-  initialMonth?: number; // 0-11
-  initialYear?: number;
+  bookings: any[]; // Array di prenotazioni
+  initialMonth?: number; // Mese iniziale opzionale
+  initialYear?: number; // Anno iniziale opzionale
 }
 
+// Componente PlayerCalendarCard
 export function PlayerCalendarCard({ bookings, initialMonth, initialYear }: PlayerCalendarCardProps) {
-  const today = new Date();
-  const [month, setMonth] = useState<number>(
-    typeof initialMonth === "number" ? initialMonth : today.getMonth()
+  const today = new Date(); // Data odierna
+  // Stati per mese e anno selezionati
+  const [month, setMonth] = useState<number>( 
+    typeof initialMonth === "number" ? initialMonth : today.getMonth() // Mese corrente
   );
   const [year, setYear] = useState<number>(
-    typeof initialYear === "number" ? initialYear : today.getFullYear()
+    typeof initialYear === "number" ? initialYear : today.getFullYear() // Anno corrente
   );
 
   // Funzioni per cambiare mese
   const handlePrevMonth = () => {
-    if (year < today.getFullYear() || (year === today.getFullYear() && month <= today.getMonth())) {
+    if (year < today.getFullYear() || (year === today.getFullYear() && month <= today.getMonth())) { // Non permettere di andare indietro oltre il mese corrente
       return;
     }
-    if (month === 0) {
+    if (month === 0) { // Se è gennaio, vai a dicembre dell'anno precedente
       setMonth(11);
       setYear((y: number) => y - 1);
     } else {
-      setMonth((m: number) => m - 1);
+      setMonth((m: number) => m - 1); // Altrimenti, vai al mese precedente
     }
   };
-  const handleNextMonth = () => {
+  // Funzione per andare al mese successivo
+  const handleNextMonth = () => { 
     if (month === 11) {
-      setMonth(0);
-      setYear((y: number) => y + 1);
+      setMonth(0); // Se è dicembre, vai a gennaio dell'anno successivo
+      setYear((y: number) => y + 1); // Aggiorna l'anno
     } else {
-      setMonth((m: number) => m + 1);
+      setMonth((m: number) => m + 1); // Altrimenti, vai al mese successivo
     }
   };
 
   // Calcola i giorni verdi per il mese/anno selezionato
-  const { useCalendarDays } = require("@/hooks/useAvailability");
-  const days = useCalendarDays(bookings, month, year);
+  const { useCalendarDays } = require("@/hooks/useAvailability"); // Importa l'hook useCalendarDays
+  const days = useCalendarDays(bookings, month, year); // Ottieni i giorni del calendario
 
   const monthNames = [
     "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno",

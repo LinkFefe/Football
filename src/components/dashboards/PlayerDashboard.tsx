@@ -1,5 +1,6 @@
-"use client";
+"use client"; // Abilita il rendering lato client
 
+// Importa hook e tipi necessari
 import { useState, useMemo, useEffect } from "react";
 import { Session, DashboardData, FieldItem } from "@/lib/types";
 import { useBookings } from "@/hooks/useBookings";
@@ -18,11 +19,12 @@ import { PlayerFieldList } from "./player/PlayerFieldList";
 import { PlayerCalendarCard } from "./player/PlayerCalendarCard";
 import { PlayerBookingList } from "./player/PlayerBookingList";
 
+// Definisci le proprietà del componente PlayerDashboard
 interface PlayerDashboardProps {
-  session: Session;
-  dashboard: DashboardData;
-  reloadData: () => void;
-  setSession: (s: Session) => void;
+  session: Session; // Dati della sessione utente
+  dashboard: DashboardData; // Dati della dashboard
+  reloadData: () => void; // Funzione per ricaricare i dati della dashboard
+  setSession: (s: Session) => void; // Funzione per aggiornare la sessione utente
 }
 
 export function PlayerDashboard({ session, dashboard, reloadData, setSession }: PlayerDashboardProps) {

@@ -1,14 +1,16 @@
-import { BookingItem } from "@/lib/types";
-import { Button } from "@/components/ui/Button";
-import { Card } from "@/components/ui/Card";
+import { BookingItem } from "@/lib/types"; // Importa il tipo BookingItem
+import { Button } from "@/components/ui/Button"; // Importa il componente Button
+import { Card } from "@/components/ui/Card"; // Importa il componente Card
 
+// Definisci le proprietà del componente PlayerBookingList
 interface PlayerBookingListProps {
-  bookings: BookingItem[];
-  onEdit: (booking: BookingItem) => void;
-  onCancel: (booking: BookingItem) => void;
+  bookings: BookingItem[]; // Array di prenotazioni
+  onEdit: (booking: BookingItem) => void; // Funzione di callback per la modifica
+  onCancel: (booking: BookingItem) => void; // Funzione di callback per l'annullamento
 }
 
-export function PlayerBookingList({ bookings, onEdit, onCancel }: PlayerBookingListProps) {
+// Componente PlayerBookingList
+export function PlayerBookingList({ bookings, onEdit, onCancel }: PlayerBookingListProps) { // Riceve le prenotazioni e le funzioni di callback come props
   return (
     <Card>
       <h3 className="text-lg font-semibold">Le mie prenotazioni</h3>
