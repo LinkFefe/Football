@@ -22,10 +22,10 @@ export function PlayerBookingList({ bookings, onEdit, onCancel }: PlayerBookingL
           >
             <span className="font-semibold text-white">{booking.field.name}</span>
             <span className="text-white/60">
-              {new Date(booking.startDate).toLocaleString([], {
-                dateStyle: "short",
-                timeStyle: "short",
-              })}
+              {new Date(booking.startDate).toLocaleDateString()} &nbsp;&nbsp; 
+              {new Date(booking.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              -
+              {new Date(booking.endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
             </span>
             <div className="flex gap-2">
               <Button

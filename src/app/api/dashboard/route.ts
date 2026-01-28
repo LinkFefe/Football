@@ -23,13 +23,15 @@ export async function GET(request: Request) {
         );
       }
 
-      // Recupera i dati del giocatore dal database
+      // Recupera i dati del giocatore dal database (solo prenotazioni future)
+      const now = new Date();
       const user = await prisma.user.findFirst({ 
         where: { id: userId, role: "PLAYER" },
         include: {
           player: {
             include: { // Includi le prenotazioni del giocatore
               bookings: {
+                where: { endDate: { gte: now } },
                 include: { field: true },
                 orderBy: { startDate: "asc" },
               },
@@ -63,7 +65,8 @@ export async function GET(request: Request) {
         );
       }
 
-      // Recupera i dati del proprietario dal database
+      // Recupera i dati del proprietario dal database (solo prenotazioni future)
+      const now = new Date();
       const owner = await prisma.owner.findFirst({
         where: { userId },
         include: {
@@ -71,7 +74,8 @@ export async function GET(request: Request) {
           fields: {
             include: {
               bookings: {
-                include: { player: { include: { user: true } } }, // Includi i dati utente del giocatore
+                where: { endDate: { gte: now } },
+                include: { player: { include: { user: true } } },
                 orderBy: { startDate: "asc" },
               },
             },
@@ -98,7 +102,9 @@ export async function GET(request: Request) {
         ownerName: f.owner?.user?.name ?? "N/A",
         ownerEmail: f.owner?.user?.email ?? "N/A"
       }));
-      const bookings = await prisma.booking.findMany({ // Recupera tutte le prenotazioni
+      // Recupera solo le prenotazioni future per l'admin
+      const bookings = await prisma.booking.findMany({
+        where: { endDate: { gte: new Date() } },
         include: {
           field: true,
           player: { include: { user: true } },

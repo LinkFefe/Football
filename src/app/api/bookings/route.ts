@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"; // Importa NextResponse per creare risposte API
 import { prisma } from "@/lib/db"; // Importa l'istanza di Prisma per interagire con il database
  
-// Gestisce le richieste GET, POST, PATCH e DELETE all'endpoint delle prenotazioni
+// Gestisce le richieste GET all'endpoint delle prenotazioni
 export async function GET(request: Request) { // Recupera le prenotazioni per un campo e una data specifici
   try {
     const { searchParams } = new URL(request.url); // Estrae i parametri di ricerca dall'URL
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
     }
 
     const startDate = new Date(`${date}T${time}:00`); // Data e ora di inizio della prenotazione
-    const hours = durationHours && durationHours > 0 ? durationHours : 2; // Durata della prenotazione in ore, default a 2
+    const hours = durationHours && durationHours > 0 ? durationHours : 2; // Durata della prenotazione in ore
     const endDate = new Date(startDate.getTime() + hours * 60 * 60 * 1000); // Calcola la data e ora di fine della prenotazione
 
     // Controlla se c'è un conflitto con altre prenotazioni esistenti
