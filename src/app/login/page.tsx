@@ -1,17 +1,9 @@
 "use client"; // Abilita il rendering lato client per questa pagina
 
-import { useEffect, useState } from "react"; // Importa gli hook useEffect e useState da React
-import { useRouter } from "next/navigation"; // Importa l'hook useRouter di Next.js per la navigazione programmata
 
-type Role = "PLAYER" | "OWNER" | "ADMIN"; // Definisce i ruoli utente disponibili
-
-// Definisce il tipo Session per rappresentare i dati della sessione utente
-type Session = {
-  id: number;
-  name: string;
-  email: string;
-  role: Role;
-};
+import { useEffect, useState } from "react"; // Importa useEffect e useState da React
+import { useRouter } from "next/navigation"; // Importa useRouter da Next.js
+import type { Session, Role } from "@/lib/types"; // Importa i tipi Session e Role
 
 // Mappa i ruoli ai loro rispettivi etichette
 const roleLabels: Record<Role, string> = {
@@ -50,7 +42,7 @@ export default function LoginPage() {
     setError(null);
 
     // Effettua una richiesta POST all'endpoint di login
-    const response = await fetch("/api/auth/login", {
+    const response = await fetch("/api/auth/login", { // Effettua una richiesta all'API di login
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, role }),
@@ -97,7 +89,7 @@ export default function LoginPage() {
     }
 
     // Memorizza i dati della sessione e reindirizza alla dashboard
-    const data = (await response.json()) as Session;
+    const data = (await response.json()) as Session; 
     localStorage.setItem("session", JSON.stringify(data));
     router.push("/dashboard");
   }
@@ -166,7 +158,7 @@ export default function LoginPage() {
                 Nome
                 <input
                   value={fullName}
-                  onChange={(event) => setFullName(event.target.value)}
+                  onChange={(event) => setFullName(event.target.value)} // Aggiorna il nome completo inserito
                   className="rounded-xl border border-white/10 bg-[#0b0f14]/80 px-4 py-3 text-sm text-white outline-none focus:border-emerald-400"
                   placeholder="Mario Rossi"
                 />

@@ -1,3 +1,6 @@
+import { NextResponse } from "next/server"; // Importa NextResponse per creare risposte API
+import { prisma } from "@/lib/db"; // Importa l'istanza di Prisma per interagire con il database
+
 // Restituisce tutti i campi con info proprietario anche per utenti normali
 export async function GET() {
   try {
@@ -5,12 +8,12 @@ export async function GET() {
       include: {
         owner: {
           include: {
-            user: true
+            user: true // Includi i dati dell'utente proprietario
           }
         }
       }
     });
-    // Mappa i dati per includere ownerName e ownerEmail
+    // Mappa i dati 
     const result = fields.map(field => ({
       id: field.id,
       name: field.name,
@@ -20,13 +23,11 @@ export async function GET() {
       ownerName: field.owner?.user?.name ?? null,
       ownerEmail: field.owner?.user?.email ?? null,
     }));
-    return NextResponse.json(result);
+    return NextResponse.json(result); // Ritorna i campi mappati
   } catch (error) {
     return NextResponse.json({ message: "Errore del server." }, { status: 500 });
   }
 }
-import { NextResponse } from "next/server"; // Importa NextResponse per creare risposte API
-import { prisma } from "@/lib/db"; // Importa l'istanza di Prisma per interagire con il database
 
 // Gestisce le richieste GET, POST, PATCH e DELETE all'endpoint dei campi
 export async function POST(request: Request) { 

@@ -3,7 +3,7 @@ import { prisma } from "@/lib/db"; // Importa l'istanza di Prisma per interagire
 
 // Componente principale della pagina Home
 export default async function Home() {
-  const now = new Date(); //
+  const now = new Date(); // Data attuale
   const [upcomingMatchesCount, availableFieldsCount, registeredUsersCount] =
     await Promise.all([ // Esegue tre query al database in parallelo per ottenere le statistiche
       prisma.booking.count(),
@@ -47,7 +47,7 @@ export default async function Home() {
           <div className="flex flex-1 flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-6">
             <div className="grid gap-4 md:grid-cols-3">
               {[
-                { label: "Prossimi match", value: String(upcomingMatchesCount) }, // Statistiche da visualizzare
+                { label: "Match", value: String(upcomingMatchesCount) }, // Statistiche da visualizzare
                 { label: "Campi disponibili", value: String(availableFieldsCount) },
                 { label: "Utenti registrati", value: String(registeredUsersCount) },
               ].map((stat) => (

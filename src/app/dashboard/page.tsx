@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "next/link"; // Importa il componente Link di Next.js per la navigazione tra pagine
 import { useEffect, useState } from "react";
 import { useSession } from "@/hooks/useSession";
 import { Session, DashboardData } from "@/lib/types";
@@ -11,15 +11,16 @@ import { PlayerDashboard } from "@/components/dashboards/PlayerDashboard";
 import { OwnerDashboard } from "@/components/dashboards/OwnerDashboard";
 import { AdminDashboard } from "@/components/dashboards/AdminDashboard";
 
+// Componente principale della pagina Dashboard
 export default function DashboardPage() {
-  // Non serve più destrutturare 'logout' qui, è gestito dal Layout/Header
-  const { session, loading: sessionLoading, setSession } = useSession();
-  const [dashboard, setDashboard] = useState<DashboardData | null>(null);
+  const { session, loading: sessionLoading, setSession } = useSession(); // Usa l'hook personalizzato per gestire la sessione utente
+  const [dashboard, setDashboard] = useState<DashboardData | null>(null); // Stato per memorizzare i dati della dashboard
 
-  const loadDashboard = async (current: Session) => {
+  // Funzione per caricare i dati della dashboard in base al ruolo dell'utente
+  const loadDashboard = async (current: Session) => { 
     try {
-      const response = await fetch(
-        `/api/dashboard?role=${current.role}&userId=${current.id}`,
+      const response = await fetch( 
+        `/api/dashboard?role=${current.role}&userId=${current.id}`, 
         { cache: "no-store" }
       );
       if (!response.ok) throw new Error("Errore nel fetch");
@@ -31,15 +32,18 @@ export default function DashboardPage() {
     }
   };
 
+  // Effettua il caricamento dei dati della dashboard quando la sessione è disponibile
   useEffect(() => {
     if (!session) return;
     loadDashboard(session);
   }, [session]);
 
+  // Gestione degli stati di caricamento e accesso
   if (sessionLoading) {
     return <div className="w-full px-6 py-6 text-white/70">Caricamento...</div>;
   }
 
+  // Se l'utente non è autenticato, mostra un messaggio di accesso richiesto
   if (!session) {
     return (
       <div className="w-full px-6 py-6">
@@ -54,16 +58,15 @@ export default function DashboardPage() {
     );
   }
 
-  // Nota: Passiamo dashboard! (non-null assertion) perché i componenti figli 
-  // gestiscono internamente i casi in cui i dati sono null/undefined (es. array vuoti)
+  // Ritorna il contenuto della dashboard in base al ruolo dell'utente
   return (
     <div className="w-full px-6 py-6">
       {session.role === "PLAYER" && (
         <PlayerDashboard 
-          session={session} 
-          dashboard={dashboard!} 
-          reloadData={() => loadDashboard(session)}
-          setSession={setSession}
+          session={session} // Dati della sessione utente
+          dashboard={dashboard!}  // I dati della dashboard 
+          reloadData={() => loadDashboard(session)} // Funzione per ricaricare i dati
+          setSession={setSession} // Funzione per aggiornare la sessione
         />
       )}
       {session.role === "OWNER" && (
