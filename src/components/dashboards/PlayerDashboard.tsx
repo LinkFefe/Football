@@ -41,6 +41,9 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
   
   const [activeSection, setActiveSection] = useState<"Home" | "Impostazioni" | "Prenotazioni">("Home"); // Stato per la sezione attiva
   const [selectedField, setSelectedField] = useState<FieldItem | null>(null); // Stato per il campo selezionato
+  const today = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth()); // 0-based
+  const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedDay, setSelectedDay] = useState<number | null>(null); // Stato per il giorno selezionato
 
   // Aggiorna il nome del profilo quando la sessione cambia
@@ -192,20 +195,45 @@ export function PlayerDashboard({ session, dashboard, reloadData, setSession }: 
       {/* Modale Info Campo (aperta dalla PlayerFieldList) */}
       {selectedField && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
-            <div className="relative w-full max-w-md mx-auto bg-[#0b0f14] rounded-3xl border border-white/10 p-4 sm:p-6 overflow-auto custom-scrollbar" style={{maxHeight: '90vh'}}>
-                <button className="absolute top-4 right-4 text-white/60 hover:text-white text-xl" onClick={() => { setSelectedField(null); setSelectedDay(null); }}>×</button>
-                <img src={selectedField.imageUrl ?? "/images/field-1.svg"} alt={selectedField.name} className="mx-auto mb-4 rounded-2xl object-cover w-72 h-48" />
-                <h2 className="text-2xl font-bold text-center text-white mb-2">{selectedField.name}</h2>
-                <div className="mb-4">
-                    <p className="text-center text-emerald-200 mb-2">Seleziona un giorno</p>
-                    <div className="grid grid-cols-7 gap-2">
-                    {Array.from({ length: 30 }, (_, i) => i + 1).map(day => (
-                        <button key={day} onClick={() => setSelectedDay(day)} className={`h-8 w-8 rounded-xl text-xs ${selectedDay === day ? "bg-emerald-400 text-black" : "bg-white/5 text-white"}`}>{day}</button>
-                    ))}
-                    </div>
-                </div>
-                {selectedDay && <FieldSlotsInfoModal fieldId={selectedField.id} selectedDay={selectedDay} />}
+          <div className="relative w-full max-w-md mx-auto bg-[#0b0f14] rounded-3xl border border-white/10 p-4 sm:p-6 overflow-auto custom-scrollbar" style={{maxHeight: '90vh'}}>
+            <button className="absolute top-4 right-4 text-white/60 hover:text-white text-xl" onClick={() => { setSelectedField(null); setSelectedDay(null); }}>×</button>
+            <img src={selectedField.imageUrl ?? "/images/field-1.svg"} alt={selectedField.name} className="mx-auto mb-4 rounded-2xl object-cover w-72 h-48" />
+            <h2 className="text-2xl font-bold text-center text-white mb-2">{selectedField.name}</h2>
+            <div className="mb-4">
+              <p className="text-center text-emerald-200 mb-2">Seleziona un giorno</p>
+              <div className="flex justify-between items-center mb-2">
+                <button
+                  onClick={() => {
+                    if (selectedMonth === 0) {
+                      setSelectedMonth(11);
+                      setSelectedYear(selectedYear - 1);
+                    } else {
+                      setSelectedMonth(selectedMonth - 1);
+                    }
+                    setSelectedDay(null);
+                  }}
+                  className={`text-white/70 hover:text-white text-lg px-2 ${selectedYear === today.getFullYear() && selectedMonth === today.getMonth() ? 'opacity-30 cursor-not-allowed' : ''}`}
+                  disabled={selectedYear === today.getFullYear() && selectedMonth === today.getMonth()}
+                >←</button>
+                <span className="text-white font-semibold">{new Date(selectedYear, selectedMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
+                <button onClick={() => {
+                  if (selectedMonth === 11) {
+                    setSelectedMonth(0);
+                    setSelectedYear(selectedYear + 1);
+                  } else {
+                    setSelectedMonth(selectedMonth + 1);
+                  }
+                  setSelectedDay(null);
+                }} className="text-white/70 hover:text-white text-lg px-2">→</button>
+              </div>
+              <div className="grid grid-cols-7 gap-2">
+                {Array.from({ length: new Date(selectedYear, selectedMonth + 1, 0).getDate() }, (_, i) => i + 1).map(day => (
+                  <button key={day} onClick={() => setSelectedDay(day)} className={`h-8 w-8 rounded-xl text-xs ${selectedDay === day ? "bg-emerald-400 text-black" : "bg-white/5 text-white"}`}>{day}</button>
+                ))}
+              </div>
             </div>
+            {selectedDay && <FieldSlotsInfoModal fieldId={selectedField.id} selectedDay={selectedDay} selectedMonth={selectedMonth} selectedYear={selectedYear} />}
+          </div>
         </div>
       )}
 

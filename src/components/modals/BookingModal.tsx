@@ -122,7 +122,10 @@ export function BookingModal({
           <Select
             label="Durata"
             value={duration}
-            onChange={(e) => setDuration(Number(e.target.value))} // Aggiorna la durata selezionata
+            onChange={(e) => {
+              const val = Number(e.target.value);
+              setDuration(val > 0 ? val : 1); // fallback a 1 se non valido
+            }}
             options={[
               { value: 1, label: "1h" },
               { value: 1.5, label: "1h 30min" },

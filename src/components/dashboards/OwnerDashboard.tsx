@@ -33,6 +33,9 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
   // Stato per la sezione attiva del dashboard
   const [activeSection, setActiveSection] = useState<"Home" | "Impostazioni" | "Prenotazioni" | "Campi">("Home");
   const [selectedField, setSelectedField] = useState<FieldItem | null>(null); // Stato per il campo selezionato
+  const today = new Date();
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth()); // 0-based
+  const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedDay, setSelectedDay] = useState<number | null>(null); // Stato per il giorno selezionato
  
   // Aggiorna il nome del profilo quando la sessione cambia
@@ -130,18 +133,43 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
                       />
                       <h2 className="text-2xl font-bold text-center text-white mb-2">{selectedField.name}</h2>
                       <p className="text-center text-emerald-200 mb-2">Seleziona un giorno</p>
+                      <div className="flex justify-between items-center mb-2">
+                        <button
+                          onClick={() => {
+                            if (selectedMonth === 0) {
+                              setSelectedMonth(11);
+                              setSelectedYear(selectedYear - 1);
+                            } else {
+                              setSelectedMonth(selectedMonth - 1);
+                            }
+                            setSelectedDay(null);
+                          }}
+                          className={`text-white/70 hover:text-white text-lg px-2 ${selectedYear === today.getFullYear() && selectedMonth === today.getMonth() ? 'opacity-30 cursor-not-allowed' : ''}`}
+                          disabled={selectedYear === today.getFullYear() && selectedMonth === today.getMonth()}
+                        >←</button>
+                        <span className="text-white font-semibold">{new Date(selectedYear, selectedMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
+                        <button onClick={() => {
+                          if (selectedMonth === 11) {
+                            setSelectedMonth(0);
+                            setSelectedYear(selectedYear + 1);
+                          } else {
+                            setSelectedMonth(selectedMonth + 1);
+                          }
+                          setSelectedDay(null);
+                        }} className="text-white/70 hover:text-white text-lg px-2">→</button>
+                      </div>
                       <div className="grid grid-cols-7 gap-2 mb-2">
-                        {Array.from({ length: 30 }, (_, i) => i + 1).map(day => (
+                        {Array.from({ length: new Date(selectedYear, selectedMonth + 1, 0).getDate() }, (_, i) => i + 1).map(day => (
                           <button
                             key={day}
-                            onClick={() => setSelectedDay(day)} // Imposta il giorno selezionato
+                            onClick={() => setSelectedDay(day)}
                             className={`h-8 w-8 rounded text-xs ${selectedDay === day ? "bg-emerald-400 text-black" : "bg-white/10 text-white hover:bg-emerald-500/20"}`}
                           >
                             {day}
                           </button>
                         ))}
                       </div>
-                      {selectedDay && <FieldSlotsInfoModal fieldId={selectedField.id} selectedDay={selectedDay} />}
+                      {selectedDay && <FieldSlotsInfoModal fieldId={selectedField.id} selectedDay={selectedDay} selectedMonth={selectedMonth} selectedYear={selectedYear} />}
                     </div>
                   </div>
                 )}

@@ -3,31 +3,30 @@
 import { useEffect, useState } from "react";
 
 // Componente FieldSlotsInfoModal
-export function FieldSlotsInfoModal({ fieldId, selectedDay }: { fieldId: number; selectedDay: number }) {
+export function FieldSlotsInfoModal({ fieldId, selectedDay, selectedMonth, selectedYear }: { fieldId: number; selectedDay: number; selectedMonth: number; selectedYear: number }) {
   const [busyTimes, setBusyTimes] = useState<{ start: Date; end: Date }[]>([]); // Orari occupati
   const [loading, setLoading] = useState(false); // Stato di caricamento
 
   // Effettua il fetch delle prenotazioni per il campo e il giorno selezionato
   useEffect(() => {
-    async function fetchBookings() { // Funzione asincrona per il fetch
-      setLoading(true); // Imposta lo stato di caricamento a true
-      const now = new Date(); // Data e ora attuali
-      const year = now.getFullYear();
-      const month = now.getMonth() + 1;
-      const day = String(selectedDay).padStart(2, "0"); // Giorno con padding
-      const dateStr = `${year}-${String(month).padStart(2, "0")}-${day}`; // Formatta la data
-      const response = await fetch(`/api/bookings?fieldId=${fieldId}&date=${dateStr}`); // Effettua la richiesta API
-      const data = await response.json(); // Estrai i dati JSON
+    async function fetchBookings() {
+      setLoading(true);
+      const day = String(selectedDay).padStart(2, "0");
+      const month = String(selectedMonth + 1).padStart(2, "0");
+      const year = selectedYear;
+      const dateStr = `${year}-${month}-${day}`;
+      const response = await fetch(`/api/bookings?fieldId=${fieldId}&date=${dateStr}`);
+      const data = await response.json();
       setBusyTimes(
         (data.bookings ?? []).map((item: any) => ({
-          start: new Date(item.startDate), // Converte in oggetto Date
-          end: new Date(item.endDate), // Converte in oggetto Date
-        })) 
+          start: new Date(item.startDate),
+          end: new Date(item.endDate),
+        }))
       );
-      setLoading(false); // Imposta lo stato di caricamento a false
+      setLoading(false);
     }
-    fetchBookings(); // Chiama la funzione di fetch
-  }, [fieldId, selectedDay]); // Esegui l'effetto quando fieldId o selectedDay cambiano
+    fetchBookings();
+  }, [fieldId, selectedDay, selectedMonth, selectedYear]);
 
   // Genera gli slot orari dalle 08:00 alle 21:30 in incrementi di 30 minuti
   const slots: string[] = [];
@@ -37,9 +36,8 @@ export function FieldSlotsInfoModal({ fieldId, selectedDay }: { fieldId: number;
     slots.push(`${String(hour).padStart(2, "0")}:${minute}`);
   }
 
-  const now = new Date(); // Data e ora attuali
-  const year = now.getFullYear();
-  const month = now.getMonth();
+  const year = selectedYear;
+  const month = selectedMonth;
 
   if (loading) return <div className="text-center text-white/50 text-xs mt-4">Caricamento disponibilità...</div>; // Mostra messaggio di caricamento
 

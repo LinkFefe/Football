@@ -126,34 +126,34 @@ export function useBookings() {
   const confirmBooking = useCallback(
     async (userId: number, fieldId: number, date: string, time: string, durationHours: number, onSuccess: () => void) => {
       setBookingLoading(true);
-      setBookingError(null); // Resetta errori precedenti
-      setBookingSuccess(null); // Resetta messaggi precedenti
-
+      setBookingError(null);
+      setBookingSuccess(null);
       try {
+        // DEBUG: log temporaneo per verificare la durata inviata
+        // eslint-disable-next-line no-console
+        console.log("[CONFIRM BOOKING] durationHours:", durationHours, typeof durationHours);
         const response = await fetch("/api/bookings", {
-          method: "POST", // Metodo POST per creare una nuova prenotazione
-          headers: { "Content-Type": "application/json" }, // Intestazioni della richiesta
-          body: JSON.stringify({ // Corpo della richiesta con i dati della prenotazione
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
             userId,
             fieldId,
             date,
             time,
-            durationHours,
+            durationHours: Number(durationHours), // Forza sempre il valore numerico decimale
           }),
         });
-
         if (!response.ok) {
           const data = await response.json();
           setBookingError(data?.message ?? "Prenotazione non riuscita.");
           return false;
         }
-
         setBookingSuccess("Prenotazione confermata!");
-        setBookingField(null); // Chiude il modale di prenotazione
-        setBookingDate(""); // Resetta la data
+        setBookingField(null);
+        setBookingDate("");
         setBookingTime("");
         setBookingDuration(1);
-        onSuccess(); // Callback di successo
+        onSuccess();
         return true;
       } finally {
         setBookingLoading(false);
