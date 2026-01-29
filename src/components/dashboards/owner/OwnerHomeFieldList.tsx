@@ -36,7 +36,7 @@ export function OwnerHomeFieldList({ fields, onInfoClick }: OwnerHomeFieldListPr
               </Button>
             </div>
             <div className="mt-4 space-y-3 text-sm text-white/70">
-              {field.bookings.slice(0, 3).map((b) => (
+              {field.bookings.slice(0, 10).map((b) => ( // Mostra solo le prime 10 prenotazioni
                 <div
                   key={b.id}
                   className="flex items-center justify-between rounded-xl border border-white/10 bg-[#0b0f14]/60 px-4 py-3"
