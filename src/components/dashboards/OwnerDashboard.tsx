@@ -20,8 +20,8 @@ import { OwnerBookingList } from "./owner/OwnerBookingList";
 interface OwnerDashboardProps {
   session: Session;
   dashboard: DashboardData;
-  reloadData: () => void;
-  setSession: (s: Session) => void; 
+  reloadData: () => void; // Funzione per ricaricare i dati della dashboard
+  setSession: (s: Session) => void;  // Funzione per aggiornare la sessione utente
 }
 
 // Componente OwnerDashboard
@@ -136,15 +136,15 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
                       <div className="flex justify-between items-center mb-2">
                         <button
                           onClick={() => {
-                            if (selectedMonth === 0) {
-                              setSelectedMonth(11);
-                              setSelectedYear(selectedYear - 1);
+                            if (selectedMonth === 0) { // Gennaio -> Dicembre anno precedente
+                              setSelectedMonth(11); // Dicembre
+                              setSelectedYear(selectedYear - 1); // Anno precedente
                             } else {
-                              setSelectedMonth(selectedMonth - 1);
+                              setSelectedMonth(selectedMonth - 1); // Mese precedente
                             }
                             setSelectedDay(null);
                           }}
-                          className={`text-white/70 hover:text-white text-lg px-2 ${selectedYear === today.getFullYear() && selectedMonth === today.getMonth() ? 'opacity-30 cursor-not-allowed' : ''}`}
+                          className={`text-white/70 hover:text-white text-lg px-2 ${selectedYear === today.getFullYear() && selectedMonth === today.getMonth() ? 'opacity-30 cursor-not-allowed' : ''}`} // Disabilita se siamo al mese/anno corrente
                           disabled={selectedYear === today.getFullYear() && selectedMonth === today.getMonth()}
                         >←</button>
                         <span className="text-white font-semibold">{new Date(selectedYear, selectedMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
@@ -159,7 +159,7 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
                         }} className="text-white/70 hover:text-white text-lg px-2">→</button>
                       </div>
                       <div className="grid grid-cols-7 gap-2 mb-2">
-                        {Array.from({ length: new Date(selectedYear, selectedMonth + 1, 0).getDate() }, (_, i) => i + 1).map(day => (
+                        {Array.from({ length: new Date(selectedYear, selectedMonth + 1, 0).getDate() }, (_, i) => i + 1).map(day => ( // Genera i giorni del mese
                           <button
                             key={day}
                             onClick={() => setSelectedDay(day)}
@@ -195,7 +195,7 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
 
         {activeSection === "Impostazioni" && (
             <ProfileSettingsForm
-              profileName={profile.profileName} setProfileName={profile.setProfileName} 
+              profileName={profile.profileName} setProfileName={profile.setProfileName}
               oldPassword={profile.oldPassword} setOldPassword={profile.setOldPassword}
               newPassword={profile.newPassword} setNewPassword={profile.setNewPassword}
               confirmPassword={profile.confirmPassword} setConfirmPassword={profile.setConfirmPassword}
