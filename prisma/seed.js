@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 async function main() {
-  
-  // Crea 50 campi con nomi, immagini e luoghi credibili assegnati casualmente agli owner
+
+  // Generazione 50 campi sportivi
   const fieldNames = [
     'Arena Centrale', 'Stadio Nord', 'Parco Sud', 'Campo Ovest', 'Green Hills', 'River Side', 'Sunset Arena',
     'City Arena', 'Lakeside', 'Stadium', 'East Park', 'Forest Field', 'Golden Field', 'Blue Arena', 'Red Stadium',
@@ -48,6 +48,7 @@ async function main() {
       });
     }
   }
+
   
   const password = await bcrypt.hash('Password123!', 10);
 
@@ -203,6 +204,58 @@ async function main() {
   }
   await prisma.booking.createMany({ data: bookings });
   console.log(`Prenotazioni create: ${bookings.length}`);
+
+  // --- GENERAZIONE 40 PRENOTAZIONI DAL 3 FEBBRAIO IN POI, SENZA SOVRAPPOSIZIONI ---
+  const bookingsMapFeb = {};
+  const bookingsFeb = [];
+  const startDateFeb = new Date('2026-02-03T00:00:00');
+  for (let i = 0; i < 40; i++) {
+    let tries = 0;
+    let created = false;
+    while (!created && tries < 100) {
+      tries++;
+      // Player e campo casuali
+      const player = players[Math.floor(Math.random() * players.length)];
+      const field = fields[Math.floor(Math.random() * fields.length)];
+      // Giorno random dal 3 febbraio in poi (entro 10 giorni)
+      const dayOffset = Math.floor(Math.random() * 10);
+      const date = new Date(startDateFeb);
+      date.setDate(startDateFeb.getDate() + dayOffset);
+      date.setHours(0, 0, 0, 0);
+      // Ora e minuti random validi
+      const hour = startHour + Math.floor(Math.random() * ((endHour - startHour) * 2 + 1)) / 2;
+      const minute = minuteOptions[Math.floor(Math.random() * minuteOptions.length)];
+      const duration = durations[Math.floor(Math.random() * durations.length)];
+      const start = new Date(date);
+      start.setHours(Math.floor(hour), minute, 0, 0);
+      const end = new Date(start);
+      end.setMinutes(start.getMinutes() + duration);
+      // Non superare le 23:00
+      if (end.getHours() > 23 || (end.getHours() === 23 && end.getMinutes() > 0)) continue;
+      // Chiave per mappa sovrapposizioni
+      const key = `${field.id}_${date.toISOString().slice(0, 10)}`;
+      if (!bookingsMapFeb[key]) bookingsMapFeb[key] = [];
+      // Controlla sovrapposizioni
+      const overlap = bookingsMapFeb[key].some(b =>
+        (start < b.end && end > b.start)
+      );
+      if (overlap) continue;
+      // Ok, aggiungi
+      bookingsMapFeb[key].push({ start, end });
+      bookingsFeb.push({
+        startDate: start,
+        endDate: end,
+        playerId: player.id,
+        fieldId: field.id,
+      });
+      created = true;
+    }
+    if (!created) {
+      console.log(`Impossibile creare la prenotazione extra ${i + 1} senza sovrapposizioni.`);
+    }
+  }
+  await prisma.booking.createMany({ data: bookingsFeb });
+  console.log(`Prenotazioni extra create dal 3 febbraio: ${bookingsFeb.length}`);
 }
 
 main()
