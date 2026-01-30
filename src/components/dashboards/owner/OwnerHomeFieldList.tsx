@@ -38,12 +38,12 @@ export function OwnerHomeFieldList({ fields, onInfoClick }: OwnerHomeFieldListPr
             <div className="mt-4 space-y-3 text-sm text-white/70">
               {field.bookings.slice(0, 10).map((b) => ( // Mostra solo le prime 10 prenotazioni
                 <div
-                  key={b.id}
+                  key={b.id} // Chiave unica per ogni prenotazione
                   className="flex items-center justify-between rounded-xl border border-white/10 bg-[#0b0f14]/60 px-4 py-3"
                 >
                   <span>{b.player.user.name}</span>
                   <span className="text-xs text-white/60">
-                    {new Date(b.startDate).toLocaleDateString()}<br />
+                    {new Date(b.startDate).toLocaleDateString()}<br /> 
                     {new Date(b.startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     {' - '}
                     {new Date(b.endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
