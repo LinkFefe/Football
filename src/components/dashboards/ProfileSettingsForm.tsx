@@ -84,7 +84,7 @@ export function ProfileSettingsForm({
               label="Password attuale"
               type="password"
               value={oldPassword}
-              onChange={(event) => setOldPassword(event.target.value)} // Aggiorna la password attuale
+              onChange={(event) => setOldPassword(event.target.value)} // Scrittura password attuale
               className="bg-[#0b0f14]/80"
             />
             <Input

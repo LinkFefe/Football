@@ -1,6 +1,6 @@
 "use client"; // Indica che questo componente deve essere renderizzato sul client
 
-import React from "react"; // Importa React
+import React from "react"; // Importa React per creare componenti
 
 // Definisci le proprietà del componente Modal
 interface ModalProps {

@@ -76,7 +76,7 @@ export function useProfile() {
     try {
       const response = await fetch("/api/profile", {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json" }, // Imposta l'intestazione Content-Type
         body: JSON.stringify({ userId }),
       });
 

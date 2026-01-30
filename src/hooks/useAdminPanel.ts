@@ -11,7 +11,7 @@ export function useAdminPanel() {
   const [adminDeleteBookingLoading, setAdminDeleteBookingLoading] = useState(false);
 
   // Effettua la richiesta di eliminazione di un utente
-  const requestDeleteUser = useCallback((user: UserItem) => { 
+  const requestDeleteUser = useCallback((user: UserItem) => {  
     setAdminDeleteUser(user); // Imposta l'utente da eliminare
   }, []);
 

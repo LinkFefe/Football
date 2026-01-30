@@ -18,7 +18,7 @@ import { OwnerBookingList } from "./owner/OwnerBookingList";
 
 // Definisci le proprietà del componente OwnerDashboard
 interface OwnerDashboardProps {
-  session: Session;
+  session: Session; 
   dashboard: DashboardData;
   reloadData: () => void; // Funzione per ricaricare i dati della dashboard
   setSession: (s: Session) => void;  // Funzione per aggiornare la sessione utente
@@ -34,7 +34,7 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
   const [activeSection, setActiveSection] = useState<"Home" | "Impostazioni" | "Prenotazioni" | "Campi">("Home");
   const [selectedField, setSelectedField] = useState<FieldItem | null>(null); // Stato per il campo selezionato
   const today = new Date();
-  const [selectedMonth, setSelectedMonth] = useState(today.getMonth()); // 0-based
+  const [selectedMonth, setSelectedMonth] = useState(today.getMonth()); // Stato per il mese selezionato
   const [selectedYear, setSelectedYear] = useState(today.getFullYear());
   const [selectedDay, setSelectedDay] = useState<number | null>(null); // Stato per il giorno selezionato
  
@@ -44,7 +44,7 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
   }, [session]);
 
   // Calcola le prenotazioni del proprietario
-  const ownerBookings = useMemo(() => {
+  const ownerBookings = useMemo(() => { // Memoizza il calcolo delle prenotazioni
     const f = dashboard?.owner?.fields ?? []; // Ottieni i campi del proprietario
     const all = f.flatMap((field) => // Appiattisci le prenotazioni di tutti i campi
       field.bookings.map((booking) => ({ // Mappa ogni prenotazione
@@ -149,7 +149,7 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
                         >←</button>
                         <span className="text-white font-semibold">{new Date(selectedYear, selectedMonth).toLocaleString('default', { month: 'long', year: 'numeric' })}</span>
                         <button onClick={() => {
-                          if (selectedMonth === 11) {
+                          if (selectedMonth === 11) { 
                             setSelectedMonth(0);
                             setSelectedYear(selectedYear + 1);
                           } else {
@@ -195,7 +195,7 @@ export function OwnerDashboard({ session, dashboard, reloadData, setSession }: O
 
         {activeSection === "Impostazioni" && (
             <ProfileSettingsForm
-              profileName={profile.profileName} setProfileName={profile.setProfileName}
+              profileName={profile.profileName} setProfileName={profile.setProfileName} 
               oldPassword={profile.oldPassword} setOldPassword={profile.setOldPassword}
               newPassword={profile.newPassword} setNewPassword={profile.setNewPassword}
               confirmPassword={profile.confirmPassword} setConfirmPassword={profile.setConfirmPassword}

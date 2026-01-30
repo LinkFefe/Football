@@ -16,9 +16,9 @@ interface FieldModalProps {
   setFieldLocation: (location: string) => void;
   fieldImageUrl: string;
   setFieldImageUrl: (url: string) => void;
-  isLoading: boolean;
-  error: string | null;
-  onClose: () => void;
+  isLoading: boolean; // Indica se è in corso un'operazione di caricamento
+  error: string | null; // Messaggio di errore da visualizzare
+  onClose: () => void; // Funzione per chiudere il modal
   onConfirm: () => void;
 }
 

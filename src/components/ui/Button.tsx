@@ -48,13 +48,13 @@ export function Button({
       className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`} // Combina tutte le classi di stile
       {...props}
     >
-      {isLoading ? (
+      {isLoading ? ( // Mostra un indicatore di caricamento se isLoading è true
         <>
           <span className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
           {children} {/* Mostra il contenuto del bottone */}
         </> 
       ) : (
-        children
+        children // Mostra il contenuto del bottone
       )}
     </button>
   );

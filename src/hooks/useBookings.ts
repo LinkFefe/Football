@@ -3,16 +3,16 @@ import { FieldItem, BookingItem } from "@/lib/types";
 
 export function useBookings() {
   // Stati per nuova prenotazione
-  const [bookingField, setBookingField] = useState<FieldItem | null>(null);
-  const [bookingDate, setBookingDate] = useState("");
-  const [bookingTime, setBookingTime] = useState("");
+  const [bookingField, setBookingField] = useState<FieldItem | null>(null); // Campo selezionato
+  const [bookingDate, setBookingDate] = useState(""); // Data selezionata
+  const [bookingTime, setBookingTime] = useState(""); // Ora selezionata
   const [bookingDuration, setBookingDuration] = useState(1);
   const [bookingError, setBookingError] = useState<string | null>(null);
   const [bookingSuccess, setBookingSuccess] = useState<string | null>(null);
   const [bookingLoading, setBookingLoading] = useState(false);
 
   // Stati per orari disponibili (nuova prenotazione)
-  const [availableTimes, setAvailableTimes] = useState<string[]>([]);
+  const [availableTimes, setAvailableTimes] = useState<string[]>([]); // Orari disponibili
   const [availabilityLoading, setAvailabilityLoading] = useState(false); // Stato di caricamento per disponibilità
   // Stati per orari disponibili (modifica prenotazione)
   const [editAvailableTimes, setEditAvailableTimes] = useState<string[]>([]);
@@ -129,10 +129,8 @@ export function useBookings() {
       setBookingError(null);
       setBookingSuccess(null);
       try {
-        // DEBUG: log temporaneo per verificare la durata inviata
-        // eslint-disable-next-line no-console
-        console.log("[CONFIRM BOOKING] durationHours:", durationHours, typeof durationHours);
-        const response = await fetch("/api/bookings", {
+        console.log("[CONFIRM BOOKING] durationHours:", durationHours, typeof durationHours); // Log per il debug
+        const response = await fetch("/api/bookings", { // Richiesta API per creare una nuova prenotazione
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -153,7 +151,7 @@ export function useBookings() {
         setBookingDate("");
         setBookingTime("");
         setBookingDuration(1);
-        onSuccess();
+        onSuccess(); // Callback di successo
         return true;
       } finally {
         setBookingLoading(false);
@@ -164,7 +162,7 @@ export function useBookings() {
 
   // Apre il modale di modifica prenotazione
   const openEditBooking = useCallback((booking: BookingItem) => {
-    setEditingBooking(booking);
+    setEditingBooking(booking); 
     const start = new Date(booking.startDate); // Estrai la data di inizio della prenotazione
     setEditDate(start.toISOString().slice(0, 10)); // Imposta la data di modifica
     setEditTime(start.toTimeString().slice(0, 5)); // Imposta l'orario di modifica

@@ -4,7 +4,7 @@ import React from "react"; // Importa React
 
 // Definisci le proprietà del componente Card
 interface CardProps {
-  children: React.ReactNode; // Contenuto del card
+  children: React.ReactNode; // Elementi figli da renderizzare all'interno del card
   className?: string; // Classi CSS aggiuntive
   variant?: "default" | "gradient" | "featured"; // Varianti di stile del card
 }
