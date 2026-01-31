@@ -5,7 +5,7 @@ import React from "react"; // Importa React
 // Definisci le proprietà del componente Input
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string; // Etichetta opzionale
-  error?: string | null; 
+  error?: string | null;  // Messaggio di errore opzionale
   helperText?: string; // Testo di aiuto opzionale
 }
 
