@@ -15,9 +15,9 @@ export function Button({
   variant = "primary",
   size = "md",
   isLoading = false,
-  disabled,
-  className = "",
-  children,
+  disabled, 
+  className = "", // Classi CSS aggiuntive
+  children, // Contenuto del bottone
   ...props
 }: ButtonProps) {
   // Definisci le classi di stile base, per variante e per dimensione

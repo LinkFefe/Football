@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 // Componente principale del layout dell'applicazione
 export default function RootLayout({
   children, // Contenuto figlio da rendere all'interno del layout
-}: Readonly<{
+}: Readonly<{ // Definisce il tipo delle proprietà del componente
   children: React.ReactNode;
 }>) {
   return (
