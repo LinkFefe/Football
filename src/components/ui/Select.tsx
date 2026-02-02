@@ -40,8 +40,8 @@ export function Select({
               ? "bg-red-500/10 border-red-500/50 text-red-200 placeholder:text-red-500/50 focus:border-red-400 focus:ring-2 focus:ring-red-500/20"
               : "bg-white/5 border-white/10 text-white hover:bg-white/10 hover:border-white/20 focus:border-emerald-400 focus:bg-white/10 focus:ring-2 focus:ring-emerald-400/20"
           } ${className}`}
-        value={props.value}
-        onChange={props.onChange}
+        value={props.value} // Valore selezionato
+        onChange={props.onChange} // Gestore del cambiamento di selezione
       >
         {/* Le opzioni */}
         {options.map((option) => (
