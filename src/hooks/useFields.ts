@@ -51,8 +51,8 @@ export function useFields() {
       setFieldError(null);
 
       try {
-        const response = await fetch("/api/fields", {
-          method: "PATCH",
+        const response = await fetch("/api/fields", { 
+          method: "PATCH", 
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             userId,
